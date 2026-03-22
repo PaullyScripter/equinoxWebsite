@@ -1,0 +1,2412 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+html, body {
+  overflow-y: scroll;
+  font-family: "Inter", sans-serif;
+  background-color: #0f0f0f;
+  color: #fff;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --white-background: white;
+  --yellow-accent: #FFFF00;
+  --black-primary: black;
+  --font-main: "Inter", sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+
+@font-face {
+  font-family: "CrescentI";
+  src: url("fonts/CrescentI.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.navigation_bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6rem; /* Reduced padding for mobile safety */
+  background-color: transparent;
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+  z-index: 1000;
+}
+
+.navigation_bar-colored {
+  background-color: var(--black-primary);
+  backdrop-filter: blur(10px);
+}
+
+
+.navigation_links {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.navigation_logins_premium {
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+    border-radius: 100px;
+    background-color: transparent;
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease;  
+    width: auto;
+    gap: 1rem;
+}
+
+
+.navigation_links a {
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.nav-group {
+  display: flex;
+  flex-direction: row; /* Keep groups in a line */
+  align-items: center;
+  gap: 0.6rem;
+}
+
+
+.nav-group-buttons {
+  padding-right: 2.8rem;
+}
+.navigation_links > .nav-group > a:hover {
+  color: var(--yellow-accent);
+}
+
+.login-button,
+.premium-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: 2px solid;
+  background: transparent;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.login-button a,
+.premium-button a {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.login-button::before,
+.premium-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--white-background);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.35s ease;
+  z-index: 1;
+}
+
+.login-button:hover::before,
+.premium-button:hover::before {
+  transform: scaleY(1);
+}
+
+.login-button {
+  color: #fff;
+  border-color: #fff;
+}
+.premium-button {
+  color: var(--yellow-accent);
+  border-color: var(--yellow-accent);
+}
+
+.login-button:hover,
+.premium-button:hover {
+  color: var(--black-primary);
+  border-color: var(--white-background);
+  z-index: 100;
+}
+
+#login-label {
+  z-index: 100;
+}
+
+.homepage {
+    padding-top: 5em;
+    height: 100vh;
+    width: 100vw;
+    background-image: url(images/background.jpg);
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents tiling */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    position: relative;
+}
+
+.homepage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Dark overlay */
+  z-index: 0;
+}
+
+.crescent-i{
+  display:inline-block;
+  font-family:"CrescentI","Inter",sans-serif; /* your custom i font first */
+  font-size: .95em;           /* slightly smaller glyph */
+  transform: translateY(.02em) scaleX(.85); /* compress width a bit */
+  margin: 0 -0.353em;          /* pull neighbors closer */
+  transform: translateY(-0.001em);
+  font-weight: lighter;
+}
+
+
+
+.homepage > * {
+  position: relative;
+  z-index: 1;
+}
+
+.paragraph_div {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 6em;
+  gap: 1em;
+}
+
+
+.homepage_title {
+    font-family: "Inter", sans-serif;
+    text-align: center;
+    /* clamp(MIN, VAL, MAX) */
+    font-size: clamp(4rem, 15vw, 10rem); 
+    color: var(--white-background);
+    font-weight: bold;
+    width: 100%; /* Ensures it stays centered and contained */
+}
+
+.homepage_paragraph {
+    font-family: "Inter", sans-serif;
+    text-align: center;
+    color: var(--white-background);
+    font-weight: normal;
+    
+    /* clamp(minimum, preferred, maximum) */
+    font-size: clamp(0.6rem, 1.6vw, 1.5rem); 
+    
+    /* Optional: Improves readability as the text scales */
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+.homepage_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  width: auto; /* Remove the 20vw restriction */
+  height: auto;
+}
+
+
+.homepage-invite-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;  /* Ensures icon and text stay side-by-side */
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;           /* Fixed gap for consistency */
+  padding: 0.6rem 1.5rem;
+  border: 2px solid var(--white-background);
+  background-color: transparent;
+  color: var(--white-background);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  
+  /* FIX: Use fit-content instead of vw to prevent squishing text */
+  width: fit-content;
+  min-width: 160px;      /* Ensures a consistent base size */
+  height: auto;          /* Let padding define the height */
+  
+  /* FIX: Prevent text from jumping to a second line */
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  font-size: clamp(0.7rem, 2vw, 1rem);
+}
+
+.homepage-invite-button a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  /* Use em so it scales perfectly with the button font-size */
+  font-size: 1em; 
+}
+
+/* SVG matches text color */
+.invite_svg path {
+  stroke: var(--white-background);
+  transition: stroke 0.3s ease, stroke-width 0.3s ease;
+  /* Maintain a visible stroke weight */
+  stroke-width: 1.5; 
+}
+/* Background fill (top → bottom) */
+.homepage-invite-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--white-background);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.35s ease;
+  z-index: 1;
+}
+
+/* Hover: fill expands top → bottom */
+.homepage-invite-button:hover::before {
+  transform: scaleY(1);
+}
+
+/* Hover: turn text and SVG black */
+.homepage-invite-button:hover {
+  color: var(--black-primary);
+}
+
+.homepage-invite-button:hover .invite_svg path {
+  stroke: var(--black-primary);
+}
+
+.invite_svg:hover {
+  color: black;
+}
+
+.invite_svg {
+  z-index: 2;
+  /* FIX: Use em so the icon stays proportional to the text size */
+  width: 1.5em; 
+  height: 1.5em;
+  flex-shrink: 0; /* Prevents the browser from squashing the icon */
+  display: block;
+}
+
+.logo {
+  width: 5em;
+  height: 5em;
+  border-radius: 100%;
+  color: white; /* change color dynamically */
+  transform: translateY(-0.25em);
+}
+
+
+.logo svg {
+  color: var(--white-background);
+  width: 100%;
+  height: 100%;
+}
+
+
+/* why equinox page */
+
+h4 {
+  font-size: 1.5em;
+}
+
+.equinox_offer_page{
+  height: 100%;
+  padding-top: 5em;
+  background-color: var(--black-primary);
+  position: relative; 
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-bottom: 6em;
+}
+
+.offer_title{
+    font-family: "Inter", sans-serif;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.equinox_desc {
+  line-height: 1.5em;
+  font-size: 0.9em;
+  font-weight: 200;
+  color: rgba(255, 255, 255, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.highlight {
+  color: rgba(255, 255, 0, 1);
+  font-weight: 500;
+}
+
+.features_box {
+  margin-top: 4em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  gap: 0.6em;
+}
+
+.features_card {
+  display: flex;
+  flex-direction: row;
+  height: 15em;
+  gap: 2em;
+  width: 90 ;
+}
+
+.feature_list_contents {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9em;
+  font-weight: regular;
+  color: rgba(255, 255, 255, 0.7);
+  padding-left: 2em;
+  gap: 0.3em;
+}
+
+.features_list{
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  width: 35em;
+  height: auto;  
+}
+
+.features_img {
+  width: 25em;
+  height: 25em;
+}
+
+.features_header {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.features_button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: 2px solid;
+  background: transparent;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  font-size: smaller;
+  height: 2em;
+  width: auto;   
+}
+
+
+.features_button a{
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.features_button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--white-background);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.35s ease;
+  z-index: 1;
+}
+
+.features_button:hover::before {
+  transform: scaleY(1);
+}
+
+.features_button {
+  color: #fff;
+  border-color: #fff;
+}
+
+.features_button:hover {
+  color: var(--black-primary);
+  border-color: var(--white-background);
+  z-index: 100;
+}
+
+
+.features_image_with_list {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.feature_image_bottom {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  justify-content: flex-start;
+}
+
+.second_feature_image {
+  width: auto;
+  height: 180px
+}
+
+.third_feature_image {
+  height: 180px
+}
+
+.third_feature_card {
+  margin-top: 11em;
+  gap: 5em;
+}
+
+.verifcation_features {
+  display: flex;
+  flex-direction: row;
+}
+
+.verification_img {
+  display: flex;
+  flex-direction: row;
+  width: 350px;
+  height: auto;
+  gap: 1em;
+  transform: translateX(-9em);
+}
+
+.features_img:hover, .second_feature_image:hover, .third_feature_image:hover {
+  cursor: pointer;
+}
+
+
+
+/* make feature images obviously interactive */
+.features_img img,
+.second_feature_image,
+.third_feature_image { cursor: zoom-in; }
+
+/* fullscreen backdrop */
+.image-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity .28s ease;
+  z-index: 1500;
+  display: block;
+}
+.image-backdrop.show { opacity: 1; }
+
+/* the animated clone */
+.zoom-clone {
+  position: fixed;
+  z-index: 1600;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.6);
+  transition: transform .32s cubic-bezier(.2,.8,.2,1);
+  transform-origin: center center;
+  will-change: transform;
+  cursor: zoom-out;
+}
+
+/* optional close button */
+.close-modal-fab {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1700;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: flex;               /* <- centers content */
+  align-items: center;         /* <- centers content */
+  justify-content: center;     /* <- centers content */
+  color: #fff;
+  font-size: 22px;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+.close-modal-fab:hover { background: rgba(255,255,255,.2); }
+
+
+body.no-scroll { overflow: hidden; }
+
+.no-scroll {
+  overflow: hidden;
+}
+
+/* === Splash Screen (updated for exact positioning) === */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  color: #fff;
+  z-index: 12000;
+  opacity: 1;
+  transition: opacity 600ms ease;
+  pointer-events: all;
+  /* Remove centering; JS will place the title */
+  display: block;
+}
+
+#splash.splash-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The title will be absolutely positioned by JS */
+#splash-title {
+  position: fixed; /* set by JS too, but safe default */
+  left: 0;
+  top: 0;
+  will-change: transform, opacity, left, top;
+  /* typography gets copied from the real .homepage_title via JS */
+}
+
+/* Lock page scroll for splash */
+html.no-scroll,
+body.no-scroll {
+  height: 100%;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.footer-block {
+  background-color: var(--black-primary);
+  padding: 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 4em;
+}
+
+.footer-section {
+    width: 100%;
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    align-items: center;
+}
+
+.footer-logo{
+  width: 15rem;
+  height: 15rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  flex-wrap: wrap; /* allow reflow instead of overlap */
+}
+
+
+.footer-links a {
+  font-size: 1em;
+}
+
+.footer-links-box {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0.25em 0.25em 0.35em;   /* room for border */
+  max-width: 9em;                  /* keep a nice base width */
+  border-bottom: 2px solid transparent;
+  transition: border-bottom-color 0.25s ease, padding 0.25s ease;
+}
+
+.footer-links-box:hover {
+  border-bottom-color: #fff;
+}
+
+.footer-links a {
+  font-size: 1em;
+  line-height: 1.2;
+  display: inline-block;                     /* enables font-size transition cleanly */
+  transition: font-size 0.25s ease, color 0.25s ease;
+}
+
+.footer-links-box:hover a {
+  font-size: 1.5em;/* grows and causes layout reflow */
+}
+
+
+
+.copyrights {
+    padding-top: 50px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.copyrights p {
+    font-size: 11px;
+    color: var(--white-background);
+    font-weight: 500;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.rotate {
+  animation: spin 4s linear infinite;
+  transform-origin: center center;
+}
+
+/* premium page */
+
+.premium-page {
+  background-color: var(--black-primary);
+  position: relative; 
+  padding-left: 5em;
+  padding-right: 5em;
+  position: relative;
+  justify-content: center;
+  background-size: cover;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.premium-logo {
+  width: 10em;
+  height: 10em;
+}
+
+.developer-hidden {
+  display: none !important;
+}
+
+.premium-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6em;
+}
+
+
+.premium-title {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+
+.premium-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  flex-wrap: 1;
+}
+
+.premium-box {
+  width: 20em;
+  height: 30em;
+  border: 2px solid var(--white-background);
+  display: flex;
+  flex-direction: column;
+  gap: 20em;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: none;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.25);
+  justify-content: flex-start;
+  padding-top: 2.5em;
+  gap: 2.5em;
+}
+.best-deal {
+  width: 25em;
+  height: 34em;
+  border-color: var(--yellow-accent);
+  box-shadow: inset 0 0 0 2px rgba(255,255,0,0.25);
+}
+
+.premium-box::before,
+.premium-box::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(255,255,255,0.9);
+}
+
+.premium-box::before {
+  top: 0; left: 0;
+  border-right: none; border-bottom: none;
+}
+
+.premium-box::after {
+  bottom: 0; right: 0;
+  border-left: none; border-top: none;
+}
+
+.best-deal::before,
+.best-deal::after {
+  border-color: var(--yellow-accent);
+}
+
+.plan-features {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5em;
+  list-style-type: none;
+}
+
+.best-deal .plan-features {
+  font-size: 1.2em;
+}
+
+.plan-header {
+  font-size: 1em;
+}
+
+.best-deal .plan-header {
+  font-size: 1.5em;
+}
+
+.lifetime-header {
+  color: var(--yellow-accent);
+}
+
+.plan-title {
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.plan-subtitle {
+  font-size: 1em;
+  color: rgba(255,255,255,0.7);
+}
+
+.plan-price {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-top: 3em;
+}
+
+.price {
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.best-price {
+  color: var(--yellow-accent);
+}
+
+.price-suffix {
+  font-size: 1.2em;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.3em;
+}
+
+.divider {
+  width: 70%;
+  height: 2px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+}
+
+.best-deal .divider {
+  background: var(--yellow-accent);
+}
+
+.plan-footer {
+  display: flex;
+  justify-content: center;
+  align-items:  center;
+}
+
+.subscribe-btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 5rem;
+  border: 2px solid var(--white-background);
+  background: transparent;
+  color: var(--white-background);
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  isolation: isolate;
+}
+
+.subscribe-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;                           /* shorthand for top/left/right/bottom: 0 */
+  width: 0%;
+  background: var(--white-background);
+  transition: width 0.35s ease;
+  z-index: 1;                         /* overlay layer */
+  pointer-events: none;               /* never blocks hover/click */
+}
+
+.subscribe-btn:hover::before {
+  width: 100%;                        /* left → right fill */
+}
+
+.subscribe-btn > span {
+  position: relative;
+  z-index: 2;                         /* text above overlay */
+}
+
+.subscribe-btn:hover {
+  color: var(--black-primary);        /* text turns black on hover */
+}
+
+/* Best Deal (Yellow) */
+.best-deal .subscribe-btn {
+  padding: 0.5rem 7rem;
+  border-color: var(--yellow-accent);
+  color: var(--yellow-accent);
+}
+
+.best-deal .subscribe-btn::before {
+  background: var(--yellow-accent);
+}
+
+.best-deal .subscribe-btn:hover {
+  color: var(--black-primary);
+}
+
+/* Smooth zoom that doesn't affect layout */
+.premium-box {
+  transform: scale(1);
+  transform-origin: center center;
+  transition: transform .35s ease, box-shadow .35s ease, filter .35s ease;
+  will-change: transform;
+  contain: paint;                /* nicer perf while zooming */
+}
+
+
+.premium-box:hover {
+  transform: scale(1.09);    
+  z-index: 5;            
+  filter: saturate(1.05);
+}
+
+/* If you want the best-deal to pop a tad more */
+.best-deal:hover {
+  transform: scale(1.06);
+}
+
+
+
+@keyframes rerverse-spin {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.reverse-rotate {
+  animation: rerverse-spin 4s linear infinite;
+  transform-origin: center center;
+}
+
+
+.pricing-compare {
+  --premium-bg: #4e4a00;              /* olive/dark yellow block bg */
+  --row-border: rgba(255,255,255,0.08);
+  --zebra: rgba(255,255,255,0.08);
+  padding: 3rem 5rem 4rem;
+  background: var(--black-primary);
+}
+
+.compare-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  overflow: hidden;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr; /* Features | Free | Premium */
+  align-items: stretch;
+  min-height: 64px;
+  border-top: 1px solid var(--row-border);
+}
+
+.compare-grid:first-of-type {
+  border-top: none;
+}
+
+.compare-head {
+  background: #000;
+}
+
+.compare-head .head {
+  display: block;
+  font-size: 1.5em;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.compare-head .plan-col.free { background: #0d0d0d; }
+.compare-head .plan-col.premium { background: var(--premium-bg); }
+
+.col {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1rem 1.25rem;
+}
+
+.same {
+  width: 100%;
+}
+
+.features-col { border-right: 1px solid var(--row-border); }
+.plan-col { border-left: 1px solid var(--row-border); justify-content: center; }
+
+.feature {
+  background: #0a0a0a;
+  font-weight: 200;
+}
+
+.value.free {
+  background: #0d0d0d;
+  justify-content: center;
+}
+
+.value.premium {
+  background: var(--premium-bg);
+  justify-content: center;
+
+}
+
+.zebra .feature { background: #1f1f1f; }
+.zebra .value.free { background: #1a1a1a; }
+.zebra .value.premium { background: color-mix(in srgb, var(--premium-bg) 90%, #000 10%); }
+
+.symbol,
+.number {
+  font-size: 1.2em;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.symbol.x { color: #fff; opacity: 0.9; }
+.symbol.check,
+.symbol.infinity,
+.value.premium .number { color: var(--yellow-accent); }
+
+.infinity {
+  font-size: 2em;
+  font-weight: 600;
+}
+
+/* Highlighted yellow row for shared features */
+.value.free {
+  background: #0d0d0d;
+  justify-content: center;
+}
+
+.value.premium {
+  background: var(--premium-bg);
+  justify-content: center;
+}
+
+.value.premium .number {
+  color: var(--yellow-accent);
+}
+
+/* Proper merged cell that stays inside the comparison table */
+.compare-grid.merged {
+  grid-template-columns: 1.6fr 2fr; /* Feature | merged cell */
+}
+
+.merged .merged-cell {
+  background: var(--premium-bg);
+  color: var(--yellow-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid var(--row-border);
+}
+
+.merged .number {
+  color: var(--yellow-accent);
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+/* Contact dropdown */
+.contact-wrap {
+  position: relative;
+}
+
+.contact-btn {
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border: 2px solid transparent;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.contact-btn:hover {
+  color: var(--yellow-accent);
+}
+
+.contact-dropdown {
+  position: absolute;
+  top: calc(100% + 1.5em);
+  right: 0;
+  width: 9em;
+  background: var(--white-background);
+  display: none;
+  z-index: 1200;
+}
+
+.contact-dropdown.open {
+  display: block;
+}
+
+.contact-item {
+  display: block;
+  color: var(--black-primary);
+  font-size: inherit;
+  text-align: center;
+  transition: background .18s ease, color .18s ease;
+}
+
+.image_third img {
+    height: 22em;   /* choose any height you want */
+    width: auto;     /* keeps aspect ratio */
+    object-fit: contain;
+}
+
+.feature_image_bottom img {
+  width: auto;
+  height: 8.5em;
+}
+
+.fourth-card {
+  /* example custom adjustments */
+  margin-top: 2.2em;
+}
+.hidden {
+  display: none !important;
+}
+.nav-hidden {
+  display: none !important;
+}
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-pill img {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+}
+
+/* Hide helper */
+.hidden {
+  display: none !important;
+}
+
+/* Main profile/login button */
+#profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 14px;
+  max-width: 12em;
+  height: 3em;
+  overflow: hidden;
+}
+
+
+#user-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  z-index: 10;
+  gap: 0.25em;
+}
+
+#profile-btn img {
+  width: 22px;   /* avatar size inside button */
+  height: 22px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+/* Dropdown */
+.profile-dropdown {
+  position: absolute;
+  right: 20px;          /* adjust to match your nav */
+  top: 70px;            /* distance below the nav */
+  background: #1e1e1e;
+  padding: 10px 12px;
+  z-index: 100;
+}
+
+.profile-dropdown button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Wrapper so dropdown sits under the profile button */
+.profile-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* The dropdown menu */
+.profile-dropdown {
+  position: absolute;
+  top: 100%;           /* EXACTLY under the button */
+  left: 0;             /* align left edges */
+  
+  background: var(--white-background);
+  padding: 8px 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  z-index: 9999;
+}
+
+/* Dropdown button style */
+.profile-dropdown button {
+  background: none;
+  border: none;
+  color: var(--black-primary);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  padding: 5px 0;
+}
+
+.profile-dropdown .dropdown-link {
+  background: none;
+  border: none;
+  color: var(--black-primary);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  font-size: 14px;
+  padding: 5px 0;
+  text-decoration: none;
+}
+
+
+#logout-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+
+/* THANK YOU PAGE */
+
+.thankyou-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--black-primary);
+}
+
+.crown_icon {
+  width: 2em;
+  height: 2em;
+  transform: translateY(-6px);
+}
+
+.thankyou-card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  max-width: 420px;
+  width: 100%;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--yellow-accent);
+  text-align: center;
+  margin-top: 5em;
+}
+
+.thankyou-avatar {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem auto; /* centers horizontally */
+}
+
+.thankyou-title {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.thankyou-name {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.thankyou-tier {
+  font-size: 0.95rem;
+  opacity: 0.8;
+  margin-bottom: 0.87rem;
+}
+
+.nav-content-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.nav-toggle, .nav-toggle-label {
+  display: none;
+}
+.contact-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+
+.subscription-page {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Account for fixed navbar */
+.subscription-page .thankyou-main {
+  flex: 1;
+  margin-top: 80px; /* navbar height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Footer must not force overflow */
+.subscription-page footer {
+  flex-shrink: 0;
+}
+
+.subscription-page .footer-section {
+  height: auto;
+}
+
+.subscription-page .footer-block {
+  padding: 1rem;
+}
+
+.subscription-page .footer-logo {
+  width: 6rem;
+  height: 6rem;
+}
+
+.subscription-page .navigation_bar,
+.subscription-page .navigation_bar.navigation_bar-colored {
+  background-color: #000;
+  backdrop-filter: none !important;
+}
+
+/* Subscription page: push the card down a bit */
+.subscription-page .thankyou-main {
+  flex: 1;
+  margin-top: 80px;       /* below fixed nav */
+  align-items: flex-start; /* stop vertical centering */
+  padding-top: 6vh;        /* LOWER it (tweak this number) */
+}
+
+/* Subscription page: compact footer */
+.subscription-page .footer-block { padding: 16px; gap: 18px; }
+.subscription-page .footer-logo { width: 6rem; height: 6rem; }
+.subscription-page .copyrights { padding-top: 10px; }
+
+/* Modal backdrop */
+
+.redeem-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.9em;
+  background-color: #000;
+  padding-bottom: 2em;
+}
+
+.redeem-section-title {
+  font-size: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+#redeem_section_button {
+  width: fit-content;
+  height: fit-content;
+  border: 2px solid var(--white-background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: none;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.25);
+  justify-content: flex-start;
+  padding: 1em 2em;
+  margin: 0 auto;
+}
+
+#redeem_section_button::before,
+#redeem_section_button::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 2px solid rgba(255,255,255,0.9);
+}
+
+#redeem_section_button::before {
+  top: 0; left: 0;
+  border-right: none; border-bottom: none;
+}
+
+#redeem_section_button::after {
+  bottom: 0; right: 0;
+  border-left: none; border-top: none;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background-color: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* start hidden */
+  opacity: 0;
+  pointer-events: none;
+
+  /* smooth fade */
+  transition: opacity 0.25s ease;
+}
+
+/* Modal visible */
+.modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Modal box */
+.modal-content {
+  background: var(--black-primary);
+  margin: auto;
+  padding: 3em 2.5em;
+  width: fit-content;
+  height: fit-content;
+  border: 2px solid var(--yellow-accent);
+
+  /* animation start state */
+  opacity: 0;
+  transform: translateY(10px) scale(0.97);
+
+  /* smooth animation */
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.modal-title {
+  padding-top: 1.7em;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.modal-deepcontent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  gap: 2em;
+}
+
+
+
+/* Animate modal-content when modal is shown */
+.modal.show .modal-content {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Code-entry boxes (XXXX-XXXX-XXXX-XXXX look) */
+.code-entry {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.code-row {
+  display: flex;
+  align-items: center;
+  gap: 14px; /* space between boxes */
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.code-box {
+  width: 52px;
+  height: 52px;
+  background: transparent;
+  border: 2px solid var(--yellow-accent);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  caret-color: transparent; /* looks cleaner like “boxes” */
+}
+
+.code-box:focus {
+  box-shadow: 0 0 0 2px rgba(255, 255, 0, 0.25);
+}
+
+.code-dash {
+  color: var(--yellow-accent);
+  font-weight: 700;
+  font-size: 28px;
+  transform: translateY(-2px);
+}
+
+
+.redeem_button {
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 5rem;
+  border: 2px solid var(--white-background);
+  background: transparent;
+  color: var(--white-background);
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  isolation: isolate;
+  margin: 1.4em auto 0;
+}
+
+.redeem_button::before {
+  content: "";
+  position: absolute;
+  inset: 0;                           /* shorthand for top/left/right/bottom: 0 */
+  width: 0%;
+  background: var(--white-background);
+  transition: width 0.35s ease;
+  z-index: 1;                         /* overlay layer */
+  pointer-events: none;               /* never blocks hover/click */
+}
+
+.redeem_button:hover::before {
+  width: 100%;                        /* left → right fill */
+}
+
+.redeem_button > span {
+  position: relative;
+  z-index: 2;                         /* text above overlay */
+}
+
+.redeem_button:hover {
+  color: var(--black-primary);        /* text turns black on hover */
+}
+
+/* Make modal-content a positioning context for the toast */
+.modal-content {
+  position: relative;
+  overflow: hidden;              /* keeps toast inside the modal */
+  padding-bottom: 5.5rem;        /* space for the toast at the bottom */
+}
+
+/* Redeem toast (inside modal only) */
+#redeem-msg {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translate(-50%, 14px);
+  opacity: 0;
+  pointer-events: none;
+
+  width: min(520px, calc(100% - 40px));
+  padding: 12px 14px;
+
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+
+  border: 2px solid rgba(255,255,255,0.25);
+  background: rgba(15,15,15,0.85);
+  backdrop-filter: blur(8px);
+
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+/* visible state */
+#redeem-msg.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+/* variants */
+#redeem-msg.info {
+  border-color: rgba(255,255,255,0.35);
+  color: #fff;
+}
+
+#redeem-msg.success {
+  border-color: rgba(255,255,0,0.8);
+  color: var(--yellow-accent);
+}
+
+#redeem-msg.error {
+  border-color: rgba(255,80,80,0.9);
+  color: #ff8c8c;
+}
+.page-toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translate(-50%, -20px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999999;
+
+  width: min(680px, calc(100% - 32px));
+  padding: 12px 14px;
+
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+
+  background: rgba(15, 15, 15, 0.92);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255, 80, 80, 0.9);
+  color: #ff8c8c;
+
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.page-toast.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+
+/* PRIVACY POLICY PAGE */
+
+.privacy-box {
+  min-height: 100vh;
+  background-color: var(--black-primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 3rem;
+}
+
+
+.privacy-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.5em;
+  max-width: 800px;
+  padding-left: 3em;
+  padding-right: 3em;
+  padding-top: 3em;
+}
+
+.privacy-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  margin-top: 2em;
+  line-height: 1.4em;
+}
+
+.privacy-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+}
+
+.privacy-title h1 {
+  font-size: 2.3em;
+}
+
+.privacy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  padding-left: 1.7em;
+}
+
+.privacy-title p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+
+
+.section-title {
+  font-size: 1.4em;
+}
+
+.privacy-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+}
+
+.privacy-content p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.privacy-box p {
+  font-size: 0.85em;
+}
+
+.text-highlight {
+  font-weight: 700;
+  color: var(--white-background);
+}
+
+.text-underline {
+  border-bottom: 1px solid var(--white-background);
+}
+
+.inline-pill {
+  display: inline-block;
+  padding: 0.3em 0.6em;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  font-size: 1.2em;
+  color: #eaeaea;
+  font-family: monospace; /* optional but matches the vibe */
+  line-height: 1.4;
+}
+
+/* Optional: scale down on small screens */
+@media (max-width: 600px) {
+  .code-box { width: 40px; height: 40px; font-size: 20px; }
+  .code-row { gap: 10px; }
+}
+
+
+/* Close button */
+.close {
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.close:hover,
+.close:focus {
+  color: var(--yellow-accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* mobile */
+@media (max-width: 640px) {
+  .thankyou-card {
+    padding: 2rem 1.5rem;
+  }
+  .thankyou-title {
+    font-size: 2rem;
+  }
+}
+
+
+/* Mobile: stack into cards */
+@media (max-width: 820px) {
+  .pricing-compare { padding: 2rem 1rem 3rem; }
+  .compare-wrap { border-width: 1px; border-radius: 6px; }
+  .compare-grid,
+  .compare-head {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .compare-head .head { font-size: 1.2rem; padding: .85rem 1rem; }
+  .col { padding: .85rem 1rem; }
+  .symbol, .number { font-size: 1.5rem; }
+}
+
+@media (max-width: 1000px) {
+  /* General section layout */
+  .equinox_offer_page {
+    padding-left: 2em;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .equinox_desc {
+    width: 100%;
+    font-size: 0.95em;
+    padding-left: 3em;
+    padding-right: 3rem;
+  }
+
+  /* 1. Reset all card containers to centered columns */
+  .features_card {
+    margin-top: 4em;
+    flex-direction: column !important; /* Overrides row/reversed row */
+    height: auto;
+    gap: 3rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* 2. Standardize ALL list variations (Fixes the left-shift) */
+  .features_list, 
+  .features_list_reversed,
+  .reversed_features_list,
+  .features_image_with_list {
+    order: 1 !important;      /* Text on top */
+    width: 100% !important;   /* Occupy full mobile width */
+    max-width: 100% !important;
+    margin: 0 auto !important; /* Forces horizontal centering */
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* Centers the header and bullet block */
+  }
+
+  /* 3. Standardize ALL image containers */
+  .features_img,
+  .verification_img,
+  .feature_image_bottom {
+    order: 2 !important;      /* Image on bottom */
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto;
+    transform: none !important; /* Removes desktop shifts like translateX(-9em) */
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 4. Keep headers (Title + Button) centered in the list */
+  .features_header {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    width: 100%;
+  }
+
+  /* 5. Bullet alignment: Center the block, but keep text left-aligned */
+  .feature_list_contents {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding-left: 2em;
+    margin: 0 auto;
+    font-size: 0.8rem;
+  }
+
+  /* Specific image sizing for mobile */
+  .features_img img,
+  .verification_img img,
+  .feature_image_bottom img,
+  .second_feature_image,
+  .third_feature_image {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  /* Stack vertical images inside verification container */
+  .verification_img {
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  /* Allow bottom images to wrap if necessary */
+  .feature_image_bottom {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1em;
+  }
+}
+
+/* --- Desktop Resets --- */
+.nav-toggle { display: none; }
+.nav-toggle-label { display: none; cursor: pointer; padding: 10px; z-index: 1001; }
+
+/* --- Base Navigation (Desktop) --- */
+.navigation_bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10000;
+  height: 80px;
+}
+
+.nav-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 10002;
+}
+
+.nav-toggle { display: none; }
+
+/* --- Burger Icon --- */
+.nav-toggle-label {
+  display: none; /* Hidden on desktop */
+  cursor: pointer;
+  padding: 10px;
+}
+
+.nav-toggle-label span,
+.nav-toggle-label span::before,
+.nav-toggle-label span::after {
+  display: block;
+  background: white;
+  height: 2px;
+  width: 25px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.nav-toggle-label span::before, .nav-toggle-label span::after { content: ""; position: absolute; left: 0; }
+.nav-toggle-label span::before { top: 8px; }
+.nav-toggle-label span::after { bottom: -8px; }
+
+#sub-details {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+#sub-details p {
+  margin: 0.25rem 0;
+}
+
+#premium-status-banner {
+  text-align: center;
+}
+@media (max-width: 1000px) {
+  /* 1. Reset Navbar */
+  .navigation_bar {
+    padding: 0 1.5rem;
+    justify-content: space-between;
+  }
+
+  .navigation_bar-colored {
+    z-index: 10010;
+  }
+
+  /* 2. Burger to X Animation */
+  .nav-toggle-label { display: block; z-index: 10005; }
+  
+  .nav-top-bar {
+      width: 100%;
+      padding: 0 2rem; /* Adjusted from 5em for better centering */
+      z-index: 10005; /* Higher than the content wrapper */
+      position: relative; /* Required for z-index to work */
+      background-color: #000;
+    }
+
+  #nav-toggle:checked ~ .nav-top-bar .nav-toggle-label span {
+    background: transparent !important;
+  }
+  #nav-toggle:checked ~ .nav-top-bar .nav-toggle-label span::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+  #nav-toggle:checked ~ .nav-top-bar .nav-toggle-label span::after {
+    transform: rotate(-45deg);
+    bottom: 0;
+  }
+  .nav-content-wrapper {
+      position: fixed;
+      top: 80px; /* Start exactly where the navigation_bar ends */
+      left: 0;
+      width: 100%;
+      height: calc(100vh - 80px); /* Fill the rest of the screen */
+      padding-top: 20px; /* Reduced from 100px since it's now lower */
+      background-color: #000;
+      /* Change transform to slide from behind the bar */
+      transform: translateY(-100%); 
+      transition: transform 0.4s ease;
+      z-index: 10001; /* Lower than nav-top-bar */
+      display: block !important;
+    }
+
+  
+
+  #nav-toggle:checked ~ .nav-content-wrapper {
+    transform: translateY(0);
+  }
+
+  /* 4. Full Width Buttons - Fixing the "Login" look */
+  .navigation_links {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    padding: 2rem;
+    margin: 0 !important;
+    width: 100%;
+    z-index: 10001;
+  }
+
+  .nav-group {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 1rem !important;
+  }
+
+  /* Make Login look exactly like Premium */
+  .profile-wrapper, .login-button, .premium-button {
+    width: 100% !important;
+    height: 50px;
+    max-width: 100% !important;
+    margin: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .login-button {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 2px solid #fff !important;
+    padding: 18px !important;
+    text-align: center;
+  }
+
+  .premium-button {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 2px solid var(--yellow-accent) !important;
+    padding: 18px !important;
+    text-align: center;
+  }
+
+  .premium-button:hover {
+    border: 2px solid var(--white-background) !important;
+  }
+
+  /* 5. Contact Dropdown Centering */
+  .contact-wrap { width: 100%; }
+  .contact-dropdown {
+    position: relative !important;
+    width: 100% !important;
+    left: 0 !important;
+    transform: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-align: center;
+  }
+
+  .contact-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the 'Contact' button text */
+    position: relative;
+    left: 0;
+    transform: none;
+  }
+
+  .contact-btn {
+    width: 100%;
+    text-align: center; /* Ensures text stays in the middle */
+    padding: 10px 0;
+    display: block;
+  }
+
+  /* Fix the Dropdown alignment */
+  .contact-dropdown {
+    position: relative !important; /* Forces it to drop DOWN, not float over */
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important; /* Removes the desktop centering math */
+    width: 100% !important;
+    box-shadow: none !important;
+    padding: 0;
+    display: none; /* Controlled by your JS/Toggle */
+
+  }
+
+  /* Show the menu when active */
+  .contact-dropdown.show, 
+  .contact-dropdown[aria-hidden="false"] {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-item {
+    width: 100%;
+    text-align: center;
+    padding: 15px 0;
+    color: white;
+  }
+  .navigation_links, .nav-group {
+    flex-direction: column !important; /* ONLY stack on mobile */
+  }
+
+  .login-button, .premium-button {
+    width: 100% !important; /* ONLY full width on mobile */
+  }
+
+  .nav-group-buttons {
+    padding-right: 0;
+  }
+  .logo {
+      z-index: 10006; /* Ensure it stays above everything */
+      transform: translateX(-25px);
+  }
+}
+
+
+/* -----------------------------
+   Mobile / Tablet responsiveness
+   (does NOT affect desktop)
+--------------------------------*/
+@media (max-width: 900px) {
+  .premium-section{
+    margin-top: 5em;
+  }
+  #premium-status-banner {
+    padding-left: 2em;
+    padding-right: 2em;
+    font-size: 0.7em;
+    transform: translateY(-20px);
+  }
+  /* Avoid 100vh clipping on mobile and reduce side padding */
+  .premium-page {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    height: auto;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  /* Stack plans and keep them centered */
+  .premium-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  /* Reorder cards on mobile: Lifetime, Yearly, Monthly (desktop unchanged) */
+  .premium-cards > div:nth-child(1) { order: 3; } /* Monthly wrapper */
+  .premium-cards > div:nth-child(2) { order: 1; } /* Lifetime wrapper */
+  .premium-cards > div:nth-child(3) { order: 2; } /* Yearly wrapper */
+
+  /* Make the plan boxes fit the screen and grow naturally */
+  .premium-box,
+  .premium-box.plan {
+    width: min(85vw, 23rem);
+    height: auto;
+    padding-bottom: 1.5rem;
+  }
+
+  /* If the Lifetime card is larger, keep it responsive too */
+  .best-deal {
+    width: min(92vw, 30rem);
+    height: auto;
+  }
+
+  /* Reduce huge internal spacing on small screens */
+  .plan-price { margin-top: 1.25rem; }
+  .price { font-size: 2.2em; }
+
+  /* Buttons should not overflow */
+  .subscribe-btn {
+    width: min(80vw, 18rem);
+    padding: 0.6rem 0;
+  }
+
+  /* Give sections breathing room under nav */
+  .premium-title { margin-top: 0.5rem; }
+}
+
+/* Feature comparison: show only Features + Premium on tablet/phone */
+@media (max-width: 900px) {
+  .pricing-compare {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .compare-wrap {
+    overflow: visible;
+  }
+
+  /* 2-column layout: Features | Premium */
+  .compare-grid {
+    grid-template-columns: 1fr 7rem;
+  }
+  .compare-grid.merged {
+    grid-template-columns: 1fr 7rem;
+  }
+
+  /* Hide Free column cells */
+  .compare-grid .plan-col.free,
+  .compare-grid .value.free {
+    display: none !important;
+  }
+
+  /* Ensure Premium column stays aligned as column 2 */
+  .compare-grid .value.premium,
+  .compare-head .plan-col.premium,
+  .compare-grid.merged .merged-cell {
+    grid-column: 2;
+    border-left: 1px solid var(--row-border);
+  }
+
+  .compare-grid .feature,
+  .compare-head .features-col {
+    grid-column: 1;
+  }
+
+  /* Prevent long feature names from causing overflow */
+  .compare-grid .feature {
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Slightly tighter on very small phones */
+  .premium-page {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .compare-grid {
+    grid-template-columns: 1fr 6rem;
+  }
+  .compare-grid.merged {
+    grid-template-columns: 1fr 6rem;
+  }
+
+  .price { font-size: 2.0em; }
+}
+@media (max-width: 900px) {
+
+  /* allow columns to size naturally */
+  .compare-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* remove fixed widths from Premium column */
+  .compare-grid .value.premium,
+  .compare-head .plan-col.premium {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: 1 1 auto !important;
+  }
+
+  /* same for Features column, so both flex evenly */
+  .compare-grid .feature,
+  .compare-head .plan-col.features {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    flex: 1 1 auto !important;
+  }
+}
+/* Redeem code — stack into 4 columns (mobile/tablet only) and hide dashes */
+@media (max-width: 900px) {
+  /* switch the row into a responsive 4-column grid so the 16 inputs become 4 rows of 4 */
+  .code-row {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(40px, 1fr)) !important;
+    gap: 10px !important;
+    justify-items: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* make each input fill its grid cell without forcing a fixed px width */
+  .code-box {
+    width: 100% !important;
+    max-width: 64px !important;   /* controls box size on mid-size phones/tablets */
+    height: 56px !important;
+    font-size: 22px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* hide the dash separators (----) */
+  .code-dash {
+    display: none !important;
+  }
+
+  /* small phones: slightly smaller boxes to keep layout tight */
+  @media (max-width: 420px) {
+    .code-row { grid-template-columns: repeat(4, minmax(34px, 1fr)) !important; gap: 8px !important; }
+    .code-box { max-width: 52px !important; height: 48px !important; font-size: 18px !important; }
+  }
+}

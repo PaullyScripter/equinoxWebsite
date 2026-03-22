@@ -1,0 +1,955 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Equinox • Developer</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="equinox.ico">
+  <title>Equinox</title>
+  <script src="app.js" defer></script>
+  <style>
+    .dev-section {
+      background-color: black;
+    }
+    .dev-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+    .dev-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 10px 0 6px;
+    }
+    .dev-sub {
+      opacity: .75;
+      margin-bottom: 18px;
+    }
+    .dev-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 900px) {
+      .dev-grid.two {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .dev-card {
+      border: 2px solid yellow;
+      padding: 14px;
+      background: rgba(0,0,0,.15);
+    }
+    .dev-card h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .dev-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    #btn-revoke { position: relative; z-index: 9999; }
+    @media (min-width: 700px) {
+      .dev-row.cols2 { grid-template-columns: 1fr 1fr; }
+      .dev-row.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .dev-input, .dev-select, .dev-textarea {
+      width: 100%;
+      border: 2px solid rgba(255,255,0,.12);
+      padding: 10px 12px;
+      background: rgba(0,0,0,.25);
+      color: inherit;
+      outline: none;
+    }
+    .dev-textarea { min-height: 110px; resize: vertical; }
+    .dev-btn {
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .dev-btn.primary { background: rgba(255,255,255,.12); color: inherit; border: 2px solid rgba(255,255,0,1); }
+    .dev-btn.danger { background: rgba(255,0,0,.18); color: inherit; border: 2px solid rgba(255,0,0,1); }
+    .dev-btn.ghost { background: rgba(0,0,0,.0); border: 1px solid rgba(255,255,255,.14); color: inherit; border: 2px solid rgba(255,255,255,1); }
+    .dev-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .dev-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+    .dev-table th, .dev-table td {
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      text-align: left;
+      vertical-align: top;
+    }
+    .dev-table th {
+      font-weight: 700;
+      opacity: .85;
+    }
+    .muted { opacity: .7; }
+    .dev-btn.danger.text-only-button {
+      padding: 0;
+      background: none;
+      border: none;
+      color: red;
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navigation_bar">
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <div class="nav-top-bar">
+        <label for="nav-toggle" class="nav-toggle-label">
+          <span></span>
+        </label>
+
+        <div class="logo" id="logo_header">
+          <a href="index.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="currentColor">
+            <path fill="none" opacity="1.000000" stroke="none" 
+                d="
+            M219.000000,501.000000 
+                C146.000015,501.000000 73.500038,501.000000 1.000039,501.000000 
+                C1.000026,334.333405 1.000026,167.666779 1.000013,1.000128 
+                C167.666565,1.000086 334.333130,1.000086 500.999756,1.000043 
+                C500.999847,167.666534 500.999847,334.333069 500.999939,500.999817 
+                C407.166656,501.000000 313.333344,501.000000 219.000000,501.000000 
+            M241.733047,228.143372 
+                C241.766159,227.680344 241.799271,227.217331 242.330826,226.632202 
+                C242.339737,226.003067 242.348648,225.373917 242.493042,224.066605 
+                C243.808914,219.693710 245.305573,215.365585 246.402069,210.938370 
+                C248.518387,202.393585 253.703232,197.412170 262.365631,195.498871 
+                C269.061279,194.019974 275.589539,191.782990 283.258362,189.576248 
+                C281.464050,188.783646 280.791351,188.390610 280.065674,188.180771 
+                C272.795410,186.078278 265.475647,184.136307 258.254883,181.877289 
+                C253.753403,180.468979 249.907944,178.049683 248.400711,173.106430 
+                C247.051071,168.680054 245.618256,164.279068 244.239014,159.861618 
+                C242.948624,155.728729 241.680389,151.588928 239.977142,146.075592 
+                C238.944595,148.864548 238.364395,150.172943 237.972321,151.535492 
+                C236.245209,157.537598 234.603943,163.564407 232.871414,169.564880 
+                C230.949753,176.220444 227.174088,180.719498 219.960861,182.444153 
+                C212.683792,184.184067 205.636963,186.886932 197.533554,189.472870 
+                C206.700806,192.427765 214.627014,195.024002 222.581116,197.531784 
+                C227.805023,199.178787 230.819061,202.958099 232.363434,207.903030 
+                C234.526596,214.829300 236.373077,221.854477 238.307358,229.530823 
+                C240.662903,231.606766 241.029556,231.530136 241.733047,228.143372 
+            M241.616547,394.823242 
+                C259.030640,396.139679 276.118561,394.648315 292.824249,389.254578 
+                C311.746796,383.145081 328.953125,374.037262 343.718933,360.606201 
+                C355.502350,349.887939 364.977692,337.334625 372.364441,323.262238 
+                C375.309021,317.652679 377.596680,311.698273 380.183411,305.900848 
+                C377.625916,306.401886 375.878937,307.350647 374.397125,308.611145 
+                C364.984985,316.617645 354.201996,322.237915 342.873718,326.933105 
+                C327.297363,333.389008 310.877625,336.517517 294.217438,336.782745 
+                C283.469269,336.953857 272.530060,335.124603 261.936920,332.932892 
+                C240.528275,328.503540 221.559570,318.541565 205.122040,304.246033 
+                C186.771072,288.286377 173.493530,268.627747 166.224533,245.344131 
+                C160.158203,225.912811 158.060501,206.005646 161.656342,185.734207 
+                C162.633774,180.224060 163.350403,174.667618 164.186737,169.132431 
+                C163.688339,168.945328 163.189941,168.758209 162.691559,168.571106 
+                C157.861237,174.131973 152.588348,179.372086 148.282669,185.313171 
+                C134.763306,203.967529 125.014336,224.272064 122.760300,247.597885 
+                C121.207054,263.671600 121.250351,279.787537 125.286072,295.423645 
+                C130.736526,316.541016 140.836456,335.478699 155.589386,351.684143 
+                C168.106293,365.433441 183.041046,375.988983 199.981628,383.612793 
+                C212.953720,389.450623 226.695862,392.666077 241.616547,394.823242 
+            M304.871002,180.502197 
+                C305.322083,179.093704 305.997040,177.714890 306.188354,176.271957 
+                C307.543915,166.047226 312.218933,159.171646 323.375885,158.102631 
+                C326.260803,157.826202 329.040588,156.452042 331.868652,155.582138 
+                C326.570129,153.068558 321.173767,152.180649 316.424835,149.927902 
+                C313.388550,148.487595 310.466095,145.436279 308.995392,142.383316 
+                C306.708282,137.635544 305.700104,132.271713 304.149872,127.168991 
+                C301.813507,131.429321 300.272705,135.702698 299.357300,140.106064 
+                C297.914062,147.048782 293.275513,150.037247 286.887207,151.432724 
+                C282.979919,152.286240 279.147583,153.483032 275.281616,154.525665 
+                C277.864288,156.391373 280.431091,157.207291 283.053589,157.758270 
+                C291.783722,159.592468 299.008911,162.985474 300.403900,173.143539 
+                C300.783813,175.909912 301.551575,178.645264 302.380310,181.320831 
+                C303.061005,183.518478 304.063904,184.034897 304.871002,180.502197 
+            M296.190674,243.096466 
+                C312.233978,244.008957 315.072235,256.554993 317.703918,269.425903 
+                C320.902252,261.787140 322.154022,253.746109 326.803619,249.120575 
+                C331.406891,244.541122 339.437927,243.407272 346.913116,240.378052 
+                C343.520538,239.467087 340.929413,238.655014 338.286285,238.083435 
+                C330.365173,236.370529 323.403320,233.837463 322.127106,224.169586 
+                C321.632233,220.420654 319.936951,216.830185 318.583618,212.514175 
+                C315.505798,219.982803 314.293579,227.993149 309.690247,232.654770 
+                C305.176971,237.225204 297.213318,238.388397 289.662292,241.501114 
+                C292.369446,242.240463 293.886078,242.654678 296.190674,243.096466 
+            M215.597290,241.395477 
+                C214.239502,240.002258 213.028503,238.414932 211.494492,237.254700 
+                C207.884796,234.524673 203.826126,235.066315 201.449844,238.329788 
+                C199.694000,240.741165 198.568558,244.958923 199.453979,247.605072 
+                C200.560394,250.911667 203.964035,253.430038 208.366104,252.928558 
+                C213.017609,252.398666 215.833298,248.403519 215.597290,241.395477 
+            M242.678452,296.019318 
+                C244.906830,299.371796 247.875458,299.518951 250.621399,297.139679 
+                C253.120087,294.974640 253.947540,291.865356 250.798813,289.598602 
+                C249.230469,288.469574 245.563187,287.549774 244.999161,288.255829 
+                C243.500366,290.132080 243.171997,292.943268 242.678452,296.019318 
+            z"/>
+            <path fill="#FCFCFC" opacity="1.000000" stroke="none" 
+                d="
+            M241.159027,394.833588 
+                C226.695862,392.666077 212.953720,389.450623 199.981628,383.612793 
+                C183.041046,375.988983 168.106293,365.433441 155.589386,351.684143 
+                C140.836456,335.478699 130.736526,316.541016 125.286072,295.423645 
+                C121.250351,279.787537 121.207054,263.671600 122.760300,247.597885 
+                C125.014336,224.272064 134.763306,203.967529 148.282669,185.313171 
+                C152.588348,179.372086 157.861237,174.131973 162.691559,168.571106 
+                C163.189941,168.758209 163.688339,168.945328 164.186737,169.132431 
+                C163.350403,174.667618 162.633774,180.224060 161.656342,185.734207 
+                C158.060501,206.005646 160.158203,225.912811 166.224533,245.344131 
+                C173.493530,268.627747 186.771072,288.286377 205.122040,304.246033 
+                C221.559570,318.541565 240.528275,328.503540 261.936920,332.932892 
+                C272.530060,335.124603 283.469269,336.953857 294.217438,336.782745 
+                C310.877625,336.517517 327.297363,333.389008 342.873718,326.933105 
+                C354.201996,322.237915 364.984985,316.617645 374.397125,308.611145 
+                C375.878937,307.350647 377.625916,306.401886 380.183411,305.900848 
+                C377.596680,311.698273 375.309021,317.652679 372.364441,323.262238 
+                C364.977692,337.334625 355.502350,349.887939 343.718933,360.606201 
+                C328.953125,374.037262 311.746796,383.145081 292.824249,389.254578 
+                C276.118561,394.648315 259.030640,396.139679 241.159027,394.833588 
+            z"/>
+            <path fill="#F4F3F3" opacity="1.000000" stroke="none" 
+                d="
+            M241.832367,226.754303 
+                C241.799271,227.217331 241.766159,227.680344 241.353088,228.520538 
+                C240.100418,228.877579 239.227737,228.857452 238.355042,228.837326 
+                C236.373077,221.854477 234.526596,214.829300 232.363434,207.903030 
+                C230.819061,202.958099 227.805023,199.178787 222.581116,197.531784 
+                C214.627014,195.024002 206.700806,192.427765 197.533554,189.472870 
+                C205.636963,186.886932 212.683792,184.184067 219.960861,182.444153 
+                C227.174088,180.719498 230.949753,176.220444 232.871414,169.564880 
+                C234.603943,163.564407 236.245209,157.537598 237.972321,151.535492 
+                C238.364395,150.172943 238.944595,148.864548 239.977142,146.075592 
+                C241.680389,151.588928 242.948624,155.728729 244.239014,159.861618 
+                C245.618256,164.279068 247.051071,168.680054 248.400711,173.106430 
+                C249.907944,178.049683 253.753403,180.468979 258.254883,181.877289 
+                C265.475647,184.136307 272.795410,186.078278 280.065674,188.180771 
+                C280.791351,188.390610 281.464050,188.783646 283.258362,189.576248 
+                C275.589539,191.782990 269.061279,194.019974 262.365631,195.498871 
+                C253.703232,197.412170 248.518387,202.393585 246.402069,210.938370 
+                C245.305573,215.365585 243.808914,219.693710 242.181656,224.687286 
+                C241.857635,225.790085 241.845001,226.272202 241.832367,226.754303 
+            z"/>
+            <path fill="#EEECEC" opacity="1.000000" stroke="none" 
+                d="
+            M304.856537,180.892212 
+                C304.063904,184.034897 303.061005,183.518478 302.380310,181.320831 
+                C301.551575,178.645264 300.783813,175.909912 300.403900,173.143539 
+                C299.008911,162.985474 291.783722,159.592468 283.053589,157.758270 
+                C280.431091,157.207291 277.864288,156.391373 275.281616,154.525665 
+                C279.147583,153.483032 282.979919,152.286240 286.887207,151.432724 
+                C293.275513,150.037247 297.914062,147.048782 299.357300,140.106064 
+                C300.272705,135.702698 301.813507,131.429321 304.149872,127.168991 
+                C305.700104,132.271713 306.708282,137.635544 308.995392,142.383316 
+                C310.466095,145.436279 313.388550,148.487595 316.424835,149.927902 
+                C321.173767,152.180649 326.570129,153.068558 331.868652,155.582138 
+                C329.040588,156.452042 326.260803,157.826202 323.375885,158.102631 
+                C312.218933,159.171646 307.543915,166.047226 306.188354,176.271957 
+                C305.997040,177.714890 305.322083,179.093704 304.856537,180.892212 
+            z"/>
+            <path fill="#F1EFEF" opacity="1.000000" stroke="none" 
+                d="
+            M295.796692,243.082672 
+                C293.886078,242.654678 292.369446,242.240463 289.662292,241.501114 
+                C297.213318,238.388397 305.176971,237.225204 309.690247,232.654770 
+                C314.293579,227.993149 315.505798,219.982803 318.583618,212.514175 
+                C319.936951,216.830185 321.632233,220.420654 322.127106,224.169586 
+                C323.403320,233.837463 330.365173,236.370529 338.286285,238.083435 
+                C340.929413,238.655014 343.520538,239.467087 346.913116,240.378052 
+                C339.437927,243.407272 331.406891,244.541122 326.803619,249.120575 
+                C322.154022,253.746109 320.902252,261.787140 317.703918,269.425903 
+                C315.072235,256.554993 312.233978,244.008957 295.796692,243.082672 
+            z"/>
+            <path fill="#F1EFEF" opacity="1.000000" stroke="none" 
+                d="
+            M215.682678,241.782516 
+                C215.833298,248.403519 213.017609,252.398666 208.366104,252.928558 
+                C203.964035,253.430038 200.560394,250.911667 199.453979,247.605072 
+                C198.568558,244.958923 199.694000,240.741165 201.449844,238.329788 
+                C203.826126,235.066315 207.884796,234.524673 211.494492,237.254700 
+                C213.028503,238.414932 214.239502,240.002258 215.682678,241.782516 
+            z"/>
+            <path fill="#E4E2E2" opacity="1.000000" stroke="none" 
+                d="
+            M242.528290,295.700958 
+                C243.171997,292.943268 243.500366,290.132080 244.999161,288.255829 
+                C245.563187,287.549774 249.230469,288.469574 250.798813,289.598602 
+                C253.947540,291.865356 253.120087,294.974640 250.621399,297.139679 
+                C247.875458,299.518951 244.906830,299.371796 242.528290,295.700958 
+            z"/>
+            <path fill="#9D9A9B" opacity="1.000000" stroke="none" 
+                d="
+            M238.331207,229.184082 
+                C239.227737,228.857452 240.100418,228.877579 241.307190,228.865875 
+                C241.029556,231.530136 240.662903,231.606766 238.331207,229.184082 
+            z"/>
+            <path fill="#9D9A9B" opacity="1.000000" stroke="none" 
+                d="
+            M242.081604,226.693253 
+                C241.845001,226.272202 241.857635,225.790085 242.113922,225.026382 
+                C242.348648,225.373917 242.339737,226.003067 242.081604,226.693253 
+            z"/>
+            </svg>
+          </a>
+        </div>
+        <div class="nav-spacer"></div> 
+      </div>
+
+      <div class="nav-content-wrapper">
+        <div class="navigation_links" id="header">
+          <div class="nav-group">
+            <a href="docs.html">Documents</a>
+            <a href="https://discord.gg/v9uceTfPCY">Support</a>
+            <a href="privacy.html">Policy</a>
+            
+            <div class="contact-wrap">
+              <button class="contact-btn" id="contact-toggle" aria-haspopup="true">Contact</button>
+              <div class="contact-dropdown" id="contact-menu">
+                <a class="contact-item" href="https://gist.github.com/PaullyScripter/7a45e0cccdf6d8c22db1b3ea5177a71e" target="_blank">Full Contact</a>
+                <a class="contact-item" href="mailto:messengerequinox@gmail.com">Work Email</a>
+                <a class="contact-item" href="mailto:bquoc6834@gmail.com">Personal Email</a>
+                <a class="contact-item" href="https://paully.fun" target="_blank">Portfolio</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-group nav-group-buttons">
+            <div class="profile-wrapper">
+              <button id="profile-btn" class="login-button nav-group-button">
+                <span id="login-label">Login</span>
+                <span id="user-content" class="nav-hidden">
+                  <img id="user-avatar" src="" alt="" />
+                  <span id="user-name"></span>
+                </span>
+              </button>
+              <div id="profile-dropdown" class="nav-hidden profile-dropdown">
+                <a class="dropdown-link" href="subscription.html">Subscription</a>
+                <button id="logout-btn"><span>Logout</span></button>
+              </div>
+            </div>
+            <button class="premium-button"><a href="premium.html">Premium</a></button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+  <div id="page-toast" class="page-toast" aria-live="polite"></div>
+  <section class="dev-section">
+    <main class="dev-wrap">
+      <div class="dev-title">Welcome back, Paul.</div>
+      <div class="dev-sub">Developer Panel.</div>
+
+      <div class="dev-grid two">
+        <section class="dev-card">
+          <h3>Import codes</h3>
+          <div class="dev-row cols2">
+            <select id="import-tier" class="dev-select">
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+              <option value="lifetime">Lifetime</option>
+            </select>
+            <input id="import-file" class="dev-input" type="file" accept=".txt,.csv"/>
+          </div>
+          <div class="dev-actions">
+            <button id="btn-import-file" type="button" class="dev-btn primary">Upload & Import</button>
+            <button id="btn-refresh-codes" type="button" class="dev-btn ghost">Refresh lists</button>
+          </div>
+          <div class="muted" id="import-result" style="margin-top:10px;"></div>
+        </section>
+
+        <section class="dev-card">
+          <h3>Add / remove codes</h3>
+          <div class="dev-row cols2">
+            <select id="manual-tier" class="dev-select">
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+              <option value="lifetime">Lifetime</option>
+            </select>
+            <input id="remove-code" class="dev-input" placeholder="Unused code to remove."/>
+          </div>
+          <div class="dev-row">
+            <textarea id="manual-codes" class="dev-textarea" placeholder="One per line."></textarea>
+          </div>
+          <div class="dev-actions">
+            <button id="btn-add-codes" type="button" class="dev-btn primary">Add codes</button>
+            <button id="btn-remove-code" type="button" class="dev-btn danger">Remove code</button>
+          </div>
+          <div class="muted" id="manual-result" style="margin-top:10px;"></div>
+        </section>
+      </div>
+      <div class="dev-card" style="margin-top:14px;">
+        <h3>Generate & import codes</h3>
+
+        <div class="row">
+          <select id="gen-tier" class="dev-input">
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+            <option value="lifetime">Lifetime</option>
+          </select>
+
+          <input id="gen-amount" class="dev-input" type="number" min="1" value="10" placeholder="Amount" />
+
+          <button id="btn-generate" class="dev-btn primary" type="button">Generate</button>
+        </div>
+
+        <textarea id="gen-output" class="dev-textarea" rows="10" placeholder="Generated codes will appear here..." readonly></textarea>
+
+        <div class="row">
+          <button id="btn-gen-import" class="dev-btn primary" type="button" disabled>Import</button>
+          <button id="btn-gen-reject" class="dev-btn danger" type="button" disabled>Reject</button>
+        </div>
+
+        <div id="gen-status" class="muted"></div>
+      </div>
+
+      <div class="dev-grid two" style="margin-top:14px;">
+        <section class="dev-card">
+          <h3>Premium Management</h3>
+          <div class="dev-row cols3">
+            <input id="grant-discord-id" class="dev-input" placeholder="Discord ID"/>
+            <select id="grant-tier" class="dev-select">
+              <option value="monthly">Monthly</option>
+              <option value="yearly">Yearly</option>
+              <option value="lifetime">Lifetime</option>
+            </select>
+            <input id="grant-code-used" class="dev-input" placeholder="ADMIN-GRANT"/>
+          </div>
+          <div class="dev-actions">
+            <button id="btn-grant" class="dev-btn primary" type="button">Grant</button>
+            <button id="btn-reduce" class="dev-btn ghost" type="button">Reduce</button>
+            <button id="btn-revoke-manual" class="dev-btn danger" type="button">Revoke</button>
+          </div>
+          <div class="muted" id="grant-result" style="margin-top:10px;"></div>
+        </section>
+
+        <section class="dev-card">
+          <h3>Redeem Lock</h3>
+          <div class="dev-row cols3">
+            <input id="lock-discord-id" class="dev-input" placeholder="Discord ID"/>
+            <input id="lock-seconds" class="dev-input" type="number" min="1" step="1" placeholder="Seconds."/>
+            <div></div>
+          </div>
+          <div class="dev-actions">
+            <button id="btn-lock" class="dev-btn primary" type="button">Lock</button>
+            <button id="btn-unlock" class="dev-btn danger" type="button">Unlock</button>
+            <button id="btn-refresh-locks" class="dev-btn ghost">Refresh locks</button>
+          </div>
+          <div class="muted" id="lock-result" style="margin-top:10px;"></div>
+        </section>
+      </div>
+
+      <div class="dev-grid" style="margin-top:14px;">
+        <section class="dev-card">
+          <h3>Premium Users</h3>
+          <div class="dev-actions">
+            <button id="btn-refresh-premium" class="dev-btn ghost">Refresh</button>
+          </div>
+          <div style="overflow:auto; margin-top:10px; max-height: 420px;">
+            <div class="dev-table-wrap">
+              <table class="dev-table" id="premium-table">
+                <thead>
+                  <tr>
+                    <th>Discord ID</th>
+                    <th>Tier</th>
+                    <th>Redeemed at</th>
+                    <th>Expires</th>
+                    <th>Code used</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="dev-card">
+          <h3>Locked Users</h3>
+          <div class="dev-actions">
+            <button id="btn-refresh-locks-table" class="dev-btn ghost">Refresh</button>
+          </div>
+          <div style="overflow:auto; margin-top:10px;">
+            <table class="dev-table" id="locks-table">
+              <thead>
+                <tr>
+                  <th>Discord ID</th>
+                  <th>Fails</th>
+                  <th>Lock until</th>
+                  <th>Type</th>
+                  <th>Updated</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </section>
+
+  <script>
+
+    function toast(type, msg, ms=3500) {
+      if (typeof window.showRedeemToast === "function") {
+        window.showRedeemToast(type, msg, ms);
+      } else {
+        alert(msg);
+      }
+    }
+
+    async function authedJson(url, options={}) {
+      const res = await fetch(url, {
+        credentials: "include",
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          ...(options.headers || {})
+        }
+      });
+      let data = null;
+      try { data = await res.json(); } catch {}
+      if (!res.ok) {
+        const detail = data?.detail?.message || data?.detail || data?.message || "Request failed";
+        throw new Error(typeof detail === "string" ? detail : JSON.stringify(detail));
+      }
+      return data;
+    }
+
+    function fmt(dt) {
+      if (!dt) return "—";
+      try {
+        const d = new Date(dt);
+        if (isNaN(d.getTime())) return String(dt);
+        return d.toLocaleString();
+      } catch {
+        return String(dt);
+      }
+    }
+
+    async function protect() {
+      try {
+        const me = await authedJson("/api/me");
+        if (!me || me.id !== "857932717681147954") {
+          window.location.replace("premium.html");
+          return;
+        }
+      } catch {
+        window.location.replace("premium.html");
+      }
+    }
+
+    function setTableRows(tbody, rowsHtml, cols=1) {
+      tbody.innerHTML = rowsHtml || `<tr><td class="muted" colspan="${cols}">No data</td></tr>`;
+    }
+
+
+    async function refreshPremiumUsers() {
+      const tbody = document.querySelector("#premium-table tbody");
+      setTableRows(tbody, '<tr><td class="muted" colspan="5">Loading…</td></tr>', 6);
+      try {
+        const data = await authedJson("/api/admin/premium-users");
+        const users = data.users || [];
+        const html = users.map(u => `
+          <tr>
+            <td>${u.discord_id}</td>
+            <td><span>${u.display_tier || u.tier || "—"}</span></td>
+            <td>${fmt(u.redeemed_at)}</td>
+            <td>${u.tier === "lifetime" ? "Never" : fmt(u.expires_at)}</td>
+            <td class="muted">${u.code_used || "—"}</td>
+            <td>
+              <button class="dev-btn danger text-only-button" type="button" data-revoke="${u.discord_id}">Revoke</button>
+            </td>
+          </tr>
+        `).join("");
+        setTableRows(tbody, html || "", 6);
+      } catch (e) {
+        toast("error", e.message);
+        setTableRows(tbody, "", 6);
+      }
+    }
+
+    async function refreshLocks() {
+      const tbody = document.querySelector("#locks-table tbody");
+      setTableRows(tbody, '<tr><td class="muted" colspan="5">Loading…</td></tr>', 5);
+      try {
+        const data = await authedJson("/api/admin/redeem-locks");
+        const locks = data.locks || [];
+        const html = locks.map(l => `
+          <tr>
+            <td>${l.discord_id}</td>
+            <td>${l.fails}</td>
+            <td>${fmt(l.effective_lock_until ?? l.lock_until)}</td>
+            <td><span>${l.lock_type || (l.lock_until ? "auto" : "—")}</span></td>
+            <td class="muted">${fmt(l.updated_at)}</td>
+          </tr>
+        `).join("");
+        setTableRows(tbody, html || "", 5);
+      } catch (e) {
+        toast("error", e.message);
+        setTableRows(tbody, "", 5);
+      }
+    }
+
+    async function importFile() {
+      const tier = document.getElementById("import-tier").value;
+      const fileInput = document.getElementById("import-file");
+      const out = document.getElementById("import-result");
+
+      if (!fileInput.files || !fileInput.files[0]) {
+        toast("info", "Choose a file first.");
+        return;
+      }
+
+      const fd = new FormData();
+      fd.append("file", fileInput.files[0]);
+
+      out.textContent = "Uploading…";
+      try {
+        const res = await fetch(`/api/admin/import-codes?tier=${encodeURIComponent(tier)}`, {
+          method: "POST",
+          credentials: "include",
+          body: fd
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const detail = data?.detail?.message || data?.detail || "Import failed";
+          throw new Error(typeof detail === "string" ? detail : JSON.stringify(detail));
+        }
+        out.textContent = `Imported.\nInserted=${data.inserted}\nSkipped(existing)=${data.skipped}\nBad=${data.bad}`;
+        toast("success", "Import complete.");
+      } catch (e) {
+        out.textContent = "";
+        toast("error", e.message);
+      }
+    }
+
+    async function addCodes() {
+      const tier = document.getElementById("manual-tier").value;
+      const codesRaw = document.getElementById("manual-codes").value || "";
+      const out = document.getElementById("manual-result");
+
+      const codes = codesRaw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+      if (!codes.length) {
+        toast("info", "Paste at least one code.");
+        return;
+      }
+
+      out.textContent = "Working…";
+      try {
+        const data = await authedJson("/api/admin/codes/add", {
+          method: "POST",
+          body: JSON.stringify({ tier, codes })
+        });
+        out.textContent = `Added. Inserted=${data.inserted}, skipped(existing)=${data.skipped}, bad=${data.bad}`;
+        toast("success", "Codes added.");
+      } catch (e) {
+        out.textContent = "";
+        toast("error", e.message);
+      }
+    }
+
+    async function removeCode() {
+      const code = (document.getElementById("remove-code").value || "").trim();
+      const out = document.getElementById("manual-result");
+      if (!code) {
+        toast("info", "Enter a code to remove.");
+        return;
+      }
+      out.textContent = "Working…";
+      try {
+        const data = await authedJson("/api/admin/codes/remove", {
+          method: "POST",
+          body: JSON.stringify({ code })
+        });
+        out.textContent = `Removed. deleted=${data.deleted} (only removes unused codes)`;
+        toast("success", "Remove complete.");
+      } catch (e) {
+        out.textContent = "";
+        toast("error", e.message);
+      }
+    }
+
+    async function grant() {
+      const discord_id = (document.getElementById("grant-discord-id").value || "").trim();
+      const tier = document.getElementById("grant-tier").value;
+      const code_used = (document.getElementById("grant-code-used").value || "ADMIN-GRANT").trim();
+      const out = document.getElementById("grant-result");
+
+      if (!discord_id) {
+        toast("info", "Enter a Discord ID.");
+        return;
+      }
+
+      out.textContent = "Working…";
+      try {
+        const data = await authedJson("/api/admin/grant", {
+          method: "POST",
+          body: JSON.stringify({ discord_id, tier, code_used })
+        });
+        localStorage.setItem("lastGrantId", discord_id);
+        out.textContent = `Granted ${data.tier} to ${data.discord_id}. Expires: ${data.expires_at || "Never"}`;
+        toast("success", "Granted.");
+        refreshPremiumUsers();
+        localStorage.setItem("lastGrantId", discord_id);
+
+      } catch (e) {
+        out.textContent = "";
+        toast("error", e.message);
+      }
+    }
+    async function reducePremium() {
+      const discord_id = (document.getElementById("grant-discord-id").value || "").trim();
+      const tier = document.getElementById("grant-tier").value;
+
+      if (!/^\d{10,25}$/.test(discord_id)) {
+        toast("error", "Invalid Discord ID");
+        return;
+      }
+
+      try {
+        const data = await authedJson("/api/admin/reduce", {
+          method: "POST",
+          body: JSON.stringify({ discord_id, tier })
+        });
+
+        toast("success", data.message || "Reduced.");
+        refreshPremiumUsers();
+      } catch (e) {
+        toast("error", e.message);
+      }
+    }
+
+    async function revoke() {
+      const discord_id = (document.getElementById("grant-discord-id").value || "").trim();
+      const out = document.getElementById("grant-result");
+
+      if (!discord_id) {
+        toast("info", "Enter a Discord ID.");
+        return;
+      }
+
+      out.textContent = "Working…";
+      try {
+        const data = await authedJson("/api/admin/revoke", {
+          method: "POST",
+          body: JSON.stringify({ discord_id })
+        });
+        localStorage.removeItem("lastGrantId");
+        out.textContent = `Revoked. deleted=${data.deleted}`;
+        toast("success", "Revoked.");
+        refreshPremiumUsers();
+      } catch (e) {
+        out.textContent = "";
+        toast("error", e.message);
+      }
+    }
+
+    async function lockUser() {
+      const discord_id = (document.getElementById("lock-discord-id").value || "").trim();
+      const seconds = Number((document.getElementById("lock-seconds").value || "").trim());
+      const out = document.getElementById("lock-result");
+
+      if (!discord_id) {
+        toast("info", "Enter a Discord ID.");
+        return;
+      }
+      if (!Number.isFinite(seconds) || seconds <= 0) {
+        toast("info", "Enter seconds > 0.");
+        return;
+      }
+
+      out.textContent = "Working…";
+      try {
+        const data = await authedJson("/api/admin/lock", {
+          method: "POST",
+          body: JSON.stringify({ discord_id, seconds })
+        });
+        out.textContent = `Locked until: ${fmt(data.lock_until)}`;
+        toast("success", "User locked.");
+        refreshLocks();
+      } catch (e) {
+        out.textContent = "";
+        toast("error", e.message);
+      }
+    }
+
+    async function unlockUser() {
+      const discord_id = (document.getElementById("lock-discord-id").value || "").trim();
+      const out = document.getElementById("lock-result");
+
+      if (!discord_id) {
+        toast("info", "Enter a Discord ID.");
+        return;
+      }
+
+      out.textContent = "Working…";
+      try {
+        await authedJson("/api/admin/unlock", {
+          method: "POST",
+          body: JSON.stringify({ discord_id })
+        });
+        out.textContent = "Unlocked.";
+        toast("success", "User unlocked.");
+        refreshLocks();
+      } catch (e) {
+        out.textContent = "";
+        toast("error", e.message);
+      }
+    }
+
+    let pendingToken = null;
+
+    async function generateCodes() {
+      const tier = document.getElementById("gen-tier").value;
+      const amount = parseInt(document.getElementById("gen-amount").value || "0", 10);
+
+      if (!amount || amount < 1) {
+        toast("error", "Amount must be >= 1");
+        return;
+      }
+
+      try {
+        const data = await authedJson("/api/admin/generate-codes", {
+          method: "POST",
+          body: JSON.stringify({ tier, amount })
+        });
+
+        pendingToken = data.token;
+        document.getElementById("gen-output").value = (data.codes || []).join("\n");
+        document.getElementById("btn-gen-import").disabled = false;
+        document.getElementById("btn-gen-reject").disabled = false;
+        document.getElementById("gen-status").textContent = `Generated ${data.amount} ${data.tier} codes (not imported yet).`;
+
+        toast("success", "Generated. Review then Import or Reject.");
+      } catch (e) {
+        toast("error", e.message);
+      }
+    }
+
+    async function importGenerated() {
+      if (!pendingToken) {
+        toast("error", "No pending batch to import");
+        return;
+      }
+      try {
+        const data = await authedJson("/api/admin/import-generated", {
+          method: "POST",
+          body: JSON.stringify({ token: pendingToken })
+        });
+
+        toast("success", `Imported ${data.inserted}, skipped ${data.skipped}`);
+        pendingToken = null;
+        document.getElementById("btn-gen-import").disabled = true;
+        document.getElementById("btn-gen-reject").disabled = true;
+        document.getElementById("gen-status").textContent = "Imported.";
+        document.getElementById("gen-output").value = "";
+        refreshCodeLists?.();
+      } catch (e) {
+        toast("error", e.message);
+      }
+    }
+
+    async function rejectGenerated() {
+      if (!pendingToken) {
+        toast("error", "No pending batch to reject");
+        return;
+      }
+      try {
+        await authedJson("/api/admin/reject-generated", {
+          method: "POST",
+          body: JSON.stringify({ token: pendingToken })
+        });
+
+        toast("success", "Rejected batch");
+        pendingToken = null;
+        document.getElementById("gen-output").value = "";
+        document.getElementById("btn-gen-import").disabled = true;
+        document.getElementById("btn-gen-reject").disabled = true;
+        document.getElementById("gen-status").textContent = "Rejected.";
+      } catch (e) {
+        toast("error", e.message);
+      }
+    }
+
+
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      await protect();
+      const saved = localStorage.getItem("lastGrantId");
+      if (saved) {
+        const input = document.getElementById("grant-discord-id");
+        if (input) input.value = saved;
+      }
+      document.getElementById("btn-import-file").addEventListener("click", importFile);
+      document.getElementById("btn-add-codes").addEventListener("click", addCodes);
+      document.getElementById("btn-remove-code").addEventListener("click", removeCode);
+      document.getElementById("btn-grant").addEventListener("click", grant);
+      document.getElementById("btn-revoke-manual").addEventListener("click", revoke);
+      document.getElementById("btn-lock").addEventListener("click", lockUser);
+      document.getElementById("btn-unlock").addEventListener("click", unlockUser);
+      document.getElementById("btn-reduce").addEventListener("click", reducePremium);
+      document.getElementById("btn-refresh-premium").addEventListener("click", refreshPremiumUsers);
+      document.getElementById("btn-refresh-locks").addEventListener("click", refreshLocks);
+      document.getElementById("btn-generate").addEventListener("click", generateCodes);
+      document.getElementById("btn-gen-import").addEventListener("click", importGenerated);
+      document.getElementById("btn-gen-reject").addEventListener("click", rejectGenerated);
+
+    
+      document.getElementById("premium-table").addEventListener("click", async (e) => {
+        const btn = e.target.closest("button[data-revoke]");
+        if (!btn) return;
+
+        const discord_id = btn.getAttribute("data-revoke");
+        try {
+          await authedJson("/api/admin/revoke", {
+            method: "POST",
+            body: JSON.stringify({ discord_id })
+          });
+          toast("success", `Revoked premium for ${discord_id}`);
+          refreshPremiumUsers();
+        } catch (err) {
+          toast("error", err.message);
+        }
+      });
+
+      const _btnLocksTable = document.getElementById("btn-refresh-locks-table");
+      if (_btnLocksTable) _btnLocksTable.addEventListener("click", refreshLocks);
+      document.getElementById("btn-refresh-codes").addEventListener("click", () => {
+        toast("info", "Code list UI is hash-only on the backend (raw codes aren’t stored).");
+      });
+
+      // initial loads
+      refreshPremiumUsers();
+      refreshLocks();
+    });
+    function setDevOffset(){
+      const nav = document.querySelector(".navigation_bar");
+      const main = document.querySelector(".dev-wrap");
+      if (!nav || !main) return;
+      main.style.paddingTop = (nav.offsetHeight + 24) + "px";
+    }
+    window.addEventListener("load", setDevOffset);
+    window.addEventListener("resize", setDevOffset);
+  </script>
+</body>
+</html>
