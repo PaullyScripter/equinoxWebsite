@@ -1037,18 +1037,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const title = document.querySelector('.homepage_title');
   if (!title) return;
 
-  document.addEventListener('mousemove', function (e) {
+  let enabled = !document.body.classList.contains('no-scroll');
+
+  function onMouseMove(e) {
+    if (!enabled) return;
     const rect = title.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
     const rotateY = (x / rect.width) * 20;
     const rotateX = -(y / rect.height) * 20;
     title.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  });
+  }
 
-  document.addEventListener('mouseleave', function () {
+  function reset() {
     title.style.transform = 'rotateX(0deg) rotateY(0deg)';
-  });
+  }
+
+  function enable() {
+    enabled = true;
+  }
+
+  document.addEventListener('mousemove', onMouseMove, { passive: true });
+  document.addEventListener('mouseleave', reset);
+  window.addEventListener('equinox:splash-ended', enable);
 })();
 
 // ── Feature image parallax ──
