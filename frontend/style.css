@@ -321,8 +321,8 @@ a.homepage-invite-button > span {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, transparent 0%, var(--black-primary) 80%);
+  height: 35%;
+  background: linear-gradient(to bottom, transparent, var(--black-primary) 85%);
   z-index: 0;
   pointer-events: none;
 }
