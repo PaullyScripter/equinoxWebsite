@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
    <head>
       <meta charset="utf-8"/>
       <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+      <meta name="description" content="Equinox premium plans — unlock advanced Discord bot features including unlimited giveaways, decorated tickets, and more." />
       <link href="style.css" rel="stylesheet"/>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-      <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet">
+      <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet" integrity="sha384-6oNXtl81GMcKAnWPPXinWlPskKUQ0NGG1/XeyMfC5RgCJKPc03w0rHVt1jyoJLf0" crossorigin="anonymous">
       <link href="equinox.ico" rel="icon"/>
       </link>
       <title>Equinox</title>
    </head>
    <meta content="f93fbad4" name="cryptomus"/>
-   <script src="https://sellauth.com/assets/js/sellauth-embed-2.js"></script>
+   <script src="https://sellauth.com/assets/js/sellauth-embed-2.js" integrity="sha384-dDeKXRhVNbJCwCBDWhsZ+u6z9xq6MeHMW+Qd8U3LkU/Q6LV+YgfTEWiLNvlprnsB" crossorigin="anonymous"></script>
    <body>
       <div aria-live="polite" class="page-toast" id="page-toast"></div>
       <nav class="navigation_bar">
@@ -237,7 +238,7 @@
                         <button id="logout-btn"><span>Logout</span></button>
                      </div>
                   </div>
-                  <button class="premium-button"><a href="premium.html">Premium</a></button>
+                   <a class="premium-button" href="premium.html"><span>Premium</span></a>
                </div>
             </div>
          </div>
@@ -586,34 +587,34 @@
                         </div>
                      </div>
                      <div class="plan-footer">
-                        <button class="purchase-btn sellauth-button subscribe-btn" data-plan="monthly" onclick="window.sellAuthEmbed.checkout(this, {
-                           cart: [{ productId: 535940, variantId: 818375, quantity: 1 }],
-                           shopId: 195441,
-                           modal: false
-                           })" type="button">
-                        <span>Subscribe</span>
-                        </button>
-                     </div>
-                  </div>
-               </div>
-               <div data-aos="fade-left">
-                  <div class="premium-box plan yearly">
-                     <div class="plan-header">
-                        <h4>Yearly</h4>
-                     </div>
-                     <div class="plan-body">
-                        <ul class="plan-features">
-                           <li>♡ Unlock all premium features.</li>
-                           <li>♡ Per user, for all servers owned.</li>
-                           <li>♡ Automatic delivery.</li>
-                           <li>♡ Refundable within 7 days.</li>
-                        </ul>
-                        <div class="plan-price">
-                           <span class="price">$29.99</span><span class="price-suffix">/year</span>
-                        </div>
-                     </div>
-                     <div class="plan-footer">
-                        <button class="purchase-btn sellauth-button subscribe-btn" data-plan="monthly" onclick="window.sellAuthEmbed.checkout(this, {
+                         <button class="purchase-btn sellauth-button subscribe-btn" data-plan="lifetime" onclick="window.sellAuthEmbed.checkout(this, {
+                            cart: [{ productId: 535940, variantId: 818375, quantity: 1 }],
+                            shopId: 195441,
+                            modal: false
+                            })" type="button">
+                         <span>Subscribe</span>
+                         </button>
+                      </div>
+                   </div>
+                </div>
+                <div data-aos="fade-left">
+                   <div class="premium-box plan yearly">
+                      <div class="plan-header">
+                         <h4>Yearly</h4>
+                      </div>
+                      <div class="plan-body">
+                         <ul class="plan-features">
+                            <li>♡ Unlock all premium features.</li>
+                            <li>♡ Per user, for all servers owned.</li>
+                            <li>♡ Automatic delivery.</li>
+                            <li>♡ Refundable within 7 days.</li>
+                         </ul>
+                         <div class="plan-price">
+                            <span class="price">$29.99</span><span class="price-suffix">/year</span>
+                         </div>
+                      </div>
+                      <div class="plan-footer">
+                         <button class="purchase-btn sellauth-button subscribe-btn" data-plan="yearly" onclick="window.sellAuthEmbed.checkout(this, {
                            cart: [{ productId: 535940, variantId: 818374, quantity: 1 }],
                            shopId: 195441,
                            modal: false
@@ -970,18 +971,23 @@
                </div>
             </div>
             <div class="copyrights">
-               <p>&copy; 2025 Equinox, All Rights Reserved.<p>
+                <p>&copy; <span id="copy-year">2025</span> Equinox, All Rights Reserved.<p>
             </div>
          </footer>
       </section>
-      <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-      <script>
-         AOS.init({
-         duration: 800, // animation speed (ms)
-         once: true     // animate only once per element
-         });
-      </script>
-      <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-      <script type="module" defer="" src="app.js"></script>
+       <script src="https://unpkg.com/aos@next/dist/aos.js" integrity="sha384-ZGo5k5ISlEzWLoXyt+lnvKt9j03Z7GkxXh14zLqVy098XJhcdKHjL8pQYVMI8WiH" crossorigin="anonymous"></script>
+       <script>
+          AOS.init({
+          duration: 800,
+          once: true
+          });
+       </script>
+       <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js" integrity="sha384-cMrTlShXEGSdSFA359p+3aVUxK/R+0TAfbRZMcTlAn8yqzxEDj05QsS65nTFMMj4" crossorigin="anonymous"></script>
+       <script src="app.js" defer></script>
+       <div id="cookie-consent" class="cookie-banner" role="dialog" aria-label="Cookie consent" hidden>
+         <p>This site uses cookies for authentication and essential functionality. By continuing, you accept our <a href="privacy.html">Privacy Policy</a>.</p>
+         <button id="cookie-accept" class="premium-button"><span>OK</span></button>
+       </div>
+       <script>document.getElementById('copy-year').textContent=new Date().getFullYear();</script>
    </body>
 </html>

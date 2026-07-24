@@ -1,12 +1,12 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Equinox developer administration panel." />
   <title>Equinox • Developer</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="equinox.ico">
-  <title>Equinox</title>
   <script src="app.js" defer></script>
   <style>
     .dev-section {
@@ -347,7 +347,7 @@
                 <button id="logout-btn"><span>Logout</span></button>
               </div>
             </div>
-            <button class="premium-button"><a href="premium.html">Premium</a></button>
+            <a class="premium-button" href="premium.html"><span>Premium</span></a>
           </div>
         </div>
       </div>
@@ -549,7 +549,7 @@
     async function protect() {
       try {
         const me = await authedJson("/api/me");
-        if (!me || me.id !== "857932717681147954") {
+        if (!me || !me.is_dev) {
           window.location.replace("premium.html");
           return;
         }

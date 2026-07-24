@@ -57,8 +57,6 @@ function formatSeconds(s) {
   return `${m}m ${r}s`;
 }
 
-const DEV_DISCORD_ID = "857932717681147954";
-
 if (window.Typed && document.querySelector(".typedText")) {
   new Typed(".typedText", {
     strings: ["utilities","tools","apps","commands","systems"],
@@ -988,7 +986,7 @@ async function initDevLink() {
   if (!devLink) return;
 
   const user = await getMe();
-  if (!user || user.id !== DEV_DISCORD_ID) {
+  if (!user || !user.is_dev) {
     devLink.classList.add("developer-hidden");
     return;
   }
@@ -1002,7 +1000,7 @@ async function protectDeveloperPage() {
   if (!isDevPage) return;
 
   const user = await getMe();
-  if (!user || user.id !== DEV_DISCORD_ID) {
+  if (!user || !user.is_dev) {
     window.location.replace("premium.html");
     return;
   }
@@ -1014,3 +1012,18 @@ document.addEventListener("DOMContentLoaded", () => {
   initDevLink();
   protectDeveloperPage();
 });
+
+(function () {
+  const banner = document.getElementById("cookie-consent");
+  const btn = document.getElementById("cookie-accept");
+  if (!banner || !btn) return;
+
+  if (!localStorage.getItem("cookies-accepted")) {
+    banner.hidden = false;
+  }
+
+  btn.addEventListener("click", () => {
+    localStorage.setItem("cookies-accepted", "1");
+    banner.hidden = true;
+  });
+})();
