@@ -2589,39 +2589,6 @@ body.page-transition-in { opacity: 1; transition: opacity 180ms ease; }
   border-color: rgba(255, 80, 80, 0.9) !important;
 }
 
-/* ── Mobile bottom nav ── */
-.mobile-bottom-nav { display: none; }
-@media (max-width: 1000px) {
-  .mobile-bottom-nav {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 56px;
-    background: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    z-index: 9999;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0 1rem;
-  }
-  .mobile-bottom-nav a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    font-size: 0.65rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-  .mobile-bottom-nav a.active { color: var(--yellow-accent); }
-  body { padding-bottom: 56px; }
-}
-
 /* ── Social proof section ── */
 .social-proof {
   background: #000;

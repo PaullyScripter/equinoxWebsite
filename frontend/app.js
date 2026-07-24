@@ -1239,18 +1239,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { passive: true });
 })();
 
-// ── Mobile bottom nav active state ──
-(function () {
-  const nav = document.getElementById("mobile-nav");
-  if (!nav) return;
-  const path = window.location.pathname.toLowerCase();
-  nav.querySelectorAll("a").forEach(a => {
-    if (a.getAttribute("href") && path.includes(a.getAttribute("href").replace(".html", ""))) {
-      a.classList.add("active");
-    }
-  });
-})();
-
 // ── Premium card 3D tilt (mouse only) ──
 (function () {
   if (!window.matchMedia("(hover: hover)").matches) return;
