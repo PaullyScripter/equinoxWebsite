@@ -1018,8 +1018,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("cookie-accept");
   if (!banner || !btn) return;
 
-  if (!localStorage.getItem("cookies-accepted")) {
-    banner.hidden = false;
+  function showBanner() {
+    if (!localStorage.getItem("cookies-accepted")) {
+      banner.hidden = false;
+    }
+  }
+
+  const splashEl = document.getElementById("splash");
+  if (splashEl && !splashEl.classList.contains("splash-hidden")) {
+    window.addEventListener("equinox:splash-ended", () => {
+      showBanner();
+    }, { once: true });
+  } else {
+    showBanner();
   }
 
   btn.addEventListener("click", () => {

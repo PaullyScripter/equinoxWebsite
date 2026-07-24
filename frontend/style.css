@@ -146,8 +146,7 @@ body::-webkit-scrollbar {
   color: var(--yellow-accent);
 }
 
-.login-button,
-.premium-button {
+.login-button {
   position: relative;
   overflow: hidden;
   display: inline-flex;
@@ -158,23 +157,11 @@ body::-webkit-scrollbar {
   background: transparent;
   transition: color 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
+  color: #fff;
+  border-color: #fff;
 }
 
-.login-button a,
-.premium-button a {
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-}
-
-.login-button::before,
-.premium-button::before {
+.login-button::before {
   content: "";
   position: absolute;
   top: 0;
@@ -188,22 +175,11 @@ body::-webkit-scrollbar {
   z-index: 1;
 }
 
-.login-button:hover::before,
-.premium-button:hover::before {
+.login-button:hover::before {
   transform: scaleY(1);
 }
 
-.login-button {
-  color: #fff;
-  border-color: #fff;
-}
-.premium-button {
-  color: var(--yellow-accent);
-  border-color: var(--yellow-accent);
-}
-
-.login-button:hover,
-.premium-button:hover {
+.login-button:hover {
   color: var(--black-primary);
   border-color: var(--white-background);
   z-index: 100;
@@ -227,6 +203,7 @@ a.premium-button, a.login-button, a.features_button {
 a.premium-button {
   color: var(--yellow-accent);
   border-color: var(--yellow-accent);
+  height: 3em;
 }
 
 a.login-button {
@@ -755,7 +732,7 @@ body.no-scroll { overflow: hidden; }
   inset: 0;
   background: #000;
   color: #fff;
-  z-index: 12000;
+  z-index: 200000;
   opacity: 1;
   transition: opacity 600ms ease;
   pointer-events: all;
