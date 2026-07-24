@@ -704,8 +704,8 @@ body.no-scroll { overflow: hidden; }
   left: 50%;
   top: 42%;
   transform: translate(-50%, -50%) scale(0.95) rotate(60deg);
-  width: min(85vw, 650px);
-  height: min(85vw, 650px);
+  width: min(95vw, 720px);
+  height: min(95vw, 720px);
   opacity: 0;
   z-index: 1;
   transition: opacity 800ms ease, transform 800ms ease;
