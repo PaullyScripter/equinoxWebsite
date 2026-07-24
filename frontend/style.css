@@ -2509,11 +2509,16 @@ body.modal-open {
 
 /* ── Footer icon hover glow ── */
 .footer-logo {
-  transition: filter 0.4s ease, transform 0.4s ease;
+  transition: transform 0.4s ease;
 }
 .footer-logo:hover {
-  filter: drop-shadow(0 0 18px rgba(255, 255, 0, 0.5));
   transform: scale(1.08);
+}
+.footer-logo svg path.logo-star {
+  transition: filter 0.4s ease;
+}
+.footer-logo:hover svg path.logo-star {
+  filter: drop-shadow(0 0 18px rgba(255, 255, 0, 0.5));
 }
 
 /* ── Nav bar frosted glass on scroll ── */
@@ -2716,6 +2721,7 @@ body.page-transition-in { opacity: 1; transition: opacity 180ms ease; }
   .contact-btn:hover { color: inherit; }
   .footer-links-box:hover { border-bottom-color: transparent; }
   .footer-links-box:hover a { font-size: 1em; }
-  .footer-logo:hover { filter: none; transform: none; }
+  .footer-logo:hover { transform: none; }
+  .footer-logo:hover svg path.logo-star { filter: none; }
   .best-deal:hover { box-shadow: none; }
 }
