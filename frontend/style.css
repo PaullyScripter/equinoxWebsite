@@ -5,13 +5,16 @@
     font-family: 'Inter', sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
-  overflow-y: scroll;
+  overflow-y: auto;
   font-family: "Inter", sans-serif;
   background-color: #0f0f0f;
   color: #fff;
   scrollbar-width: none;
-  scroll-behavior: smooth;
 }
 
 body {
