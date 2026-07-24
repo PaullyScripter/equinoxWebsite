@@ -1062,13 +1062,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const sx = clampedY / 15;
     const sy = -clampedX / 15;
-    const depth = 8 * factor;
+    const depth = 12;
     const layers = [];
-    for (let i = depth; i >= 1; i--) {
-      const alpha = 0.08 + (i / depth) * 0.12;
-      layers.push(`${Math.round(sx * i)}px ${Math.round(sy * i)}px 0 rgba(0,0,0,${alpha.toFixed(2)})`);
+    for (let i = 1; i <= depth; i++) {
+      const t = i / depth;
+      const gray = Math.round(180 - t * 120);
+      layers.push(`${Math.round(sx * i)}px ${Math.round(sy * i)}px 0 rgb(${gray},${gray},${gray})`);
     }
-    layers.push(`${Math.round(sx * depth * 0.3)}px ${Math.round(sy * depth * 0.3)}px ${Math.round(depth * 2)}px rgba(0,0,0,0.4)`);
+    layers.push(`${Math.round(sx * depth * 1.2)}px ${Math.round(sy * depth * 1.2)}px ${Math.round(depth)}px rgba(0,0,0,0.35)`);
     title.style.textShadow = layers.join(', ');
     title.style.transform = `rotateX(${clampedX}deg) rotateY(${clampedY}deg)`;
   }
