@@ -702,7 +702,7 @@ body.no-scroll { overflow: hidden; }
 #splash-logo {
   position: absolute;
   left: 50%;
-  top: calc(42% + 2px);
+  top: calc(42% + 12px);
   transform: translate(-50%, -50%) scale(0.95) rotate(60deg);
   width: min(95vw, 720px);
   height: min(95vw, 720px);
