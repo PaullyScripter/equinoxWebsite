@@ -302,6 +302,7 @@ window.addEventListener("scroll", function () {
       splashTitle.style.whiteSpace = "nowrap";
       splashTitle.style.margin = "0";
       splashTitle.style.padding = "0";
+      splashTitle.style.zIndex = "2";
       splashTitle.style.transform = "none";
       splashTitle.style.left = px(r.left) + "px";
       splashTitle.style.top  = px(r.top)  + "px";
@@ -311,6 +312,7 @@ window.addEventListener("scroll", function () {
       splashTitle.style.transformOrigin = cs.transformOrigin || "left top";
     }
     splashTitle.style.color = "#fff";
+    splashTitle.style.zIndex = "2";
   }
 
   // Debounced ResizeObserver + resize (rAF throttled)

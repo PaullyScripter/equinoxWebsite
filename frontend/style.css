@@ -700,20 +700,20 @@ body.no-scroll { overflow: hidden; }
 }
 
 #splash-logo {
-  position: fixed;
+  position: absolute;
   left: 50%;
-  bottom: 18%;
-  transform: translate(-50%, 10px);
-  width: 48px;
-  height: 48px;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: min(60vw, 400px);
+  height: min(60vw, 400px);
   opacity: 0;
-  z-index: 200001;
-  transition: opacity 500ms ease, transform 500ms ease;
+  z-index: 1;
+  transition: opacity 800ms ease, transform 800ms ease;
   pointer-events: none;
 }
 #splash-logo.visible {
-  opacity: 0.6;
-  transform: translate(-50%, 0);
+  opacity: 0.08;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 /* The title will be absolutely positioned by JS */
