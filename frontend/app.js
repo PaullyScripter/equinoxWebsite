@@ -1032,17 +1032,35 @@ document.addEventListener("DOMContentLoaded", () => {
   document.head.appendChild(style);
 })();
 
-// ── "Try Me" smooth scroll ──
+// ── Smooth momentum scrolling ──
 (function () {
-  const btn = document.querySelector('.homepage-invite-button[href="#features"]');
-  if (!btn) return;
-  btn.addEventListener("click", (e) => {
-    const target = document.getElementById("features");
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: "smooth" });
+  let vel = 0;
+  let pos = window.scrollY;
+  let animating = false;
+  const friction = 0.88;
+  const sensitivity = 0.6;
+
+  function tick() {
+    vel *= friction;
+    pos += vel;
+    pos = Math.max(0, Math.min(pos, document.body.scrollHeight - window.innerHeight));
+    window.scrollTo(0, Math.round(pos));
+    if (Math.abs(vel) > 0.1) {
+      requestAnimationFrame(tick);
+    } else {
+      animating = false;
     }
-  });
+  }
+
+  window.addEventListener("wheel", function (e) {
+    e.preventDefault();
+    pos = window.scrollY;
+    vel += e.deltaY * sensitivity;
+    if (!animating) {
+      animating = true;
+      requestAnimationFrame(tick);
+    }
+  }, { passive: false });
 })();
 
 // ── Feature image parallax ──
