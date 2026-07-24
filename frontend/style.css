@@ -2725,4 +2725,14 @@ body.page-transition-in { opacity: 1; transition: opacity 180ms ease; }
   .best-deal:hover { box-shadow: none; }
   .homepage_title { transform: none !important; text-shadow: none !important; transition: none !important; will-change: auto; transform-style: flat; }
   .paragraph_div { perspective: none; }
+  .homepage-invite-button:hover::before { transform: scaleY(0); }
+  .homepage-invite-button:hover .invite_svg path { stroke: #fff; }
+  .features_img:hover, .second_feature_image:hover, .third_feature_image:hover { transform: none; cursor: default; }
+  .close-modal-fab:hover { background: rgba(255,255,255,.12); }
+  .redeem_button:hover::before { transform: scaleY(0); }
+  .redeem_button:hover { color: var(--yellow-accent); }
+  .close:hover, .close:focus { color: #aaa; }
+  .faq-question:hover { color: inherit; }
+  .premium-button:hover { color: var(--yellow-accent); border-color: var(--yellow-accent); }
+  .premium-button:hover::before { transform: scaleY(0); }
 }
