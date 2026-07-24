@@ -5,10 +5,6 @@
     font-family: 'Inter', sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 html, body {
   overflow-y: scroll;
   font-family: "Inter", sans-serif;
