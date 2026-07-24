@@ -1051,6 +1051,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const maxDist = Math.max(rect.width, rect.height) * 1.5;
     if (dist > maxDist) {
       title.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      title.style.textShadow = 'none';
       return;
     }
     const factor = 1 - Math.min(dist / maxDist, 1);
@@ -1058,11 +1059,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const rotateX = -(dy / rect.height) * 25 * factor;
     const clampedY = Math.max(-15, Math.min(15, rotateY));
     const clampedX = Math.max(-15, Math.min(15, rotateX));
+
+    const sx = clampedY / 15;
+    const sy = -clampedX / 15;
+    const depth = 8 * factor;
+    const layers = [];
+    for (let i = depth; i >= 1; i--) {
+      const alpha = 0.08 + (i / depth) * 0.12;
+      layers.push(`${Math.round(sx * i)}px ${Math.round(sy * i)}px 0 rgba(0,0,0,${alpha.toFixed(2)})`);
+    }
+    layers.push(`${Math.round(sx * depth * 0.3)}px ${Math.round(sy * depth * 0.3)}px ${Math.round(depth * 2)}px rgba(0,0,0,0.4)`);
+    title.style.textShadow = layers.join(', ');
     title.style.transform = `rotateX(${clampedX}deg) rotateY(${clampedY}deg)`;
   }
 
   function reset() {
     title.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    title.style.textShadow = 'none';
   }
 
   function enable() {

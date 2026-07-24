@@ -363,20 +363,11 @@ a.homepage-invite-button > span {
     color: var(--white-background);
     font-weight: bold;
     transform-style: preserve-3d;
-    transition: transform 0.1s ease-out;
+    transition: transform 0.1s ease-out, text-shadow 0.1s ease-out;
     will-change: transform;
     width: 100%;
     position: relative;
     z-index: 2;
-    text-shadow:
-      0 1px 0 #c9c9c9,
-      0 2px 0 #bbb,
-      0 3px 0 #aaa,
-      0 4px 0 #999,
-      0 5px 0 #888,
-      0 6px 0 #777,
-      0 7px 0 #666,
-      0 10px 20px rgba(0,0,0,0.5);
 }
 
 .homepage_paragraph {
