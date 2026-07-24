@@ -150,6 +150,7 @@ body::-webkit-scrollbar {
 
 .nav-group-buttons {
   padding-right: 2.8rem;
+  margin-left: auto;
 }
 .navigation_links > .nav-group > a:not(.premium-button):hover {
   color: var(--yellow-accent);
