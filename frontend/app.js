@@ -1226,7 +1226,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      card.style.transform = `scale(1.09) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+      card.style.transform = `scale(1.09) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
     });
     card.addEventListener("mouseleave", () => { card.style.transform = ""; });
   });
