@@ -352,16 +352,19 @@ a.homepage-invite-button > span {
   justify-content: center;
   padding-bottom: 6em;
   gap: 1em;
+  perspective: 800px;
 }
 
 
 .homepage_title {
     font-family: "Inter", sans-serif;
     text-align: center;
-    /* clamp(MIN, VAL, MAX) */
     font-size: clamp(4rem, 15vw, 10rem); 
     color: var(--white-background);
     font-weight: bold;
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+    will-change: transform;
     width: 100%; /* Ensures it stays centered and contained */
 }
 
