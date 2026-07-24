@@ -1,4 +1,4 @@
-﻿if (window.__equinox_app_loaded) {
+if (window.__equinox_app_loaded) {
   console.warn("app.js loaded twice - skipping init");
   throw new Error("Duplicate app.js load prevented");
 }
@@ -41,7 +41,17 @@ async function getMe() {
           return { rate_limited: true, retry_after: retry };
         }
         if (!res.ok) return null;
-        return res.json();
+        const data = await res.json();
+        try { sessionStorage.setItem("equinox_user", JSON.stringify(data)); } catch {}
+        return data;
+      })
+      .catch(function () {
+        try {
+          const stored = sessionStorage.getItem("equinox_user");
+          return stored ? JSON.parse(stored) : null;
+        } catch {
+          return null;
+        }
       })
       .then((data) => (cachedMe = data));
   }
@@ -472,7 +482,7 @@ window.addEventListener("scroll", function () {
 // ===============================
 // Discord Login/Profile Button Logic
 // ===============================
-const BACKEND_URL = "https://premiumbottesting-production.up.railway.app";
+const BACKEND_URL = "http://45.131.65.107:25777";
 
 (function () {
   const profileBtn = document.getElementById("profile-btn");
@@ -694,6 +704,14 @@ async function initPremiumStatusUI() {
     banner.textContent = `You're a premium user, ${displayName}! Thank you for supporting Equinox.`;
     banner.style.display = "block";
   }
+
+  const cards = document.querySelector(".premium-cards");
+  if (cards) {
+    cards.style.setProperty("display", "flex", "important");
+  }
+  document.querySelectorAll(".premium-box").forEach(function (card) {
+    card.style.setProperty("display", "flex", "important");
+  });
 }
 
 // ---------- Thank-you page: protect + fill avatar/name ----------
@@ -1003,12 +1021,21 @@ function setupRedeemCodeBoxes() {
 }
 
 
+const DEV_DISCORD_ID = "857932717681147954";
+
+function isDevUser(user) {
+  if (!user) return false;
+  if (user.is_dev) return true;
+  if (String(user.id) === DEV_DISCORD_ID) return true;
+  return false;
+}
+
 async function initDevLink() {
   const devLink = document.getElementById("dev-link");
   if (!devLink) return;
 
   const user = await getMe();
-  if (!user || !user.is_dev) {
+  if (!isDevUser(user)) {
     devLink.classList.add("developer-hidden");
     return;
   }
@@ -1022,7 +1049,8 @@ async function protectDeveloperPage() {
   if (!isDevPage) return;
 
   const user = await getMe();
-  if (!user || !user.is_dev) {
+  if (!user) return;
+  if (!isDevUser(user)) {
     window.location.replace("premium.html");
     return;
   }

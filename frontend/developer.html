@@ -546,15 +546,17 @@
       }
     }
 
+    const DEV_ID = "857932717681147954";
+
     async function protect() {
       try {
         const me = await authedJson("/api/me");
-        if (!me || !me.is_dev) {
-          window.location.replace("premium.html");
-          return;
-        }
-      } catch {
+        if (!me) return;
+        if (me.is_dev) return;
+        if (String(me.id) === DEV_ID) return;
         window.location.replace("premium.html");
+      } catch {
+        return;
       }
     }
 
