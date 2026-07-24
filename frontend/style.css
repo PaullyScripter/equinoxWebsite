@@ -1049,26 +1049,22 @@ body.no-scroll {
   color: var(--black-primary);
 }
 
-/* Smooth zoom that doesn't affect layout */
-.premium-box {
-  transform: scale(1);
-  transform-origin: center center;
-  transition: transform .35s ease, box-shadow .35s ease, filter .35s ease;
-  will-change: transform;
-  contain: paint;                /* nicer perf while zooming */
+/* ── Premium card 3D tilt ── */
+.premium-cards > div {
+  perspective: 800px;
 }
-
-
-.premium-box:hover {
-  transform: scale(1.09);    
-  z-index: 5;            
-  filter: saturate(1.05);
+.premium-box {
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
 }
 
 /* If you want the best-deal to pop a tad more */
 .best-deal:hover {
   transform: scale(1.06);
+  box-shadow: 0 0 40px rgba(255, 255, 0, 0.15);
 }
+
+/* ── 3D tilt via JS mouse tracking ── */
 
 
 
@@ -2554,6 +2550,7 @@ body.page-transition-in { opacity: 1; transition: opacity 180ms ease; }
 }
 
 /* ── Mobile bottom nav ── */
+.mobile-bottom-nav { display: none; }
 @media (max-width: 1000px) {
   .mobile-bottom-nav {
     display: flex;

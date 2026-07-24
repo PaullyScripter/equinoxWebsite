@@ -1189,6 +1189,7 @@ document.addEventListener("DOMContentLoaded", () => {
       counted = true;
       stats.forEach(stat => {
         const target = parseFloat(stat.getAttribute("data-count"));
+        const suffix = stat.getAttribute("data-suffix") || "";
         const decimals = target % 1 !== 0 ? 1 : 0;
         const duration = 1500;
         let start;
@@ -1196,7 +1197,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (!start) start = ts;
           const progress = Math.min(1, (ts - start) / duration);
           const eased = 1 - Math.pow(1 - progress, 3);
-          stat.textContent = (eased * target).toFixed(decimals);
+          stat.textContent = (eased * target).toFixed(decimals) + suffix;
           if (progress < 1) requestAnimationFrame(update);
         }
         requestAnimationFrame(update);
@@ -1214,6 +1215,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (a.getAttribute("href") && path.includes(a.getAttribute("href").replace(".html", ""))) {
       a.classList.add("active");
     }
+  });
+})();
+
+// ── Premium card 3D tilt ──
+(function () {
+  document.querySelectorAll(".premium-box").forEach(card => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `scale(1.09) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+    });
+    card.addEventListener("mouseleave", () => { card.style.transform = ""; });
   });
 })();
 
