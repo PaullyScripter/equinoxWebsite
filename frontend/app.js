@@ -622,45 +622,6 @@ const BACKEND_URL = "http://45.131.65.107:25777";
 
 })();
 
-(function () {
-  const purchaseButtons = document.querySelectorAll(".purchase-btn");
-  const statusEl = document.getElementById("status");
-
-  if (!purchaseButtons.length) return;
-
-  async function createSellAuthCheckout(plan) {
-    if (statusEl) statusEl.textContent = `Creating ${plan} checkout...`;
-
-    try {
-      const res = await fetch("/api/sellauth/checkout", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),   // only plan; backend gets user id from cookie
-      });
-
-      if (!res.ok) throw new Error("Failed to create checkout");
-      const data = await res.json();
-
-      if (data.url) {
-        window.location.href = data.url; // go to SellAuth checkout
-      } else if (statusEl) {
-        statusEl.textContent = "Could not get SellAuth checkout URL.";
-      }
-    } catch (err) {
-      console.error(err);
-      if (statusEl) statusEl.textContent = "Error while creating checkout.";
-    }
-  }
-
-  purchaseButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const plan = btn.dataset.plan; // "monthly" | "yearly" | "lifetime"
-      if (plan) createSellAuthCheckout(plan);
-    });
-  });
-})();
-
 
 
 
