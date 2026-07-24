@@ -294,7 +294,7 @@
                 <button id="logout-btn"><span>Logout</span></button>
                 </div>
             </div>
-            <button class="premium-button"><a href="premium.html">Premium</a></button>
+            <a class="premium-button" href="premium.html"><span>Premium</span></a>
             </div>
         </div>
         </div>
@@ -628,10 +628,15 @@
               </div>
           </div>
           <div class="copyrights">
-              <p>&copy; 2025 Equinox, All Rights Reserved.<p>
+              <p>&copy; <span id="copy-year">2025</span> Equinox, All Rights Reserved.<p>
           </div>
       </footer>
     </section>
 <script src="app.js" defer></script>
+<div id="cookie-consent" class="cookie-banner" role="dialog" aria-label="Cookie consent" hidden>
+  <p>This site uses cookies for authentication and essential functionality. By continuing, you accept our <a href="privacy.html">Privacy Policy</a>.</p>
+  <button id="cookie-accept" class="premium-button"><span>OK</span></button>
+</div>
+<script>document.getElementById('copy-year').textContent=new Date().getFullYear();</script>
 </body>
 </html>

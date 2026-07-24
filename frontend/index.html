@@ -1,19 +1,23 @@
 <!doctype html>
-
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Equinox is a feature-rich Discord bot with moderation, giveaways, tickets, verification, and server protection tools." />
+  <link rel="preload" as="image" href="images/background.jpg" />
+  <title>Equinox</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="equinox.ico">
 </head>
-  <title>Equinox</title>
   <meta name="cryptomus" content="f93fbad4" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
     <div id="splash" aria-hidden="true">
         <h1 id="splash-title">Equinox</h1>
+        <div id="splash-bar"></div>
+        <div id="splash-logo"></div>
     </div>
 
     <nav class="navigation_bar">
@@ -252,24 +256,25 @@
                 <button id="logout-btn"><span>Logout</span></button>
               </div>
             </div>
-            <button class="premium-button"><a href="premium.html">Premium</a></button>
+            <a class="premium-button" href="premium.html"><span>Premium</span></a>
           </div>
         </div>
       </div>
     </nav>
-    <section class="homepage">
+    <section class="homepage" id="main-content">
+        <canvas id="particle-canvas"></canvas>
         <div class="paragraph_div">
             <h1 class="homepage_title">Σqu<span class="crescent-i">i</span>nϕx</h1>
             <p class="homepage_paragraph">Let Equinox solely manage your server with advanced <a class="typedText"></a>.</p>
             <div class="homepage_button">
-              <button class="homepage-invite-button">
+              <a class="homepage-invite-button" href="#features">
                 <svg class="invite_svg" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.00001 21V15.3426C6.00001 15.1158 5.96145 14.8908 5.88599 14.6769L3.35382 7.50248C3.15169 6.92978 3.40765 6.29618 3.95086 6.02457C4.5347 5.73265 5.24482 5.95902 5.552 6.53498L9.00001 13M18 21V15.3426C18 15.1158 18.0386 14.8908 18.114 14.6769L20.6462 7.50248C20.8483 6.92978 20.5924 6.29618 20.0491 6.02457C19.4653 5.73265 18.7552 5.95902 18.448 6.53498L15 13M16 6.5C16 8.70914 14.2091 10.5 12 10.5C9.79087 10.5 8.00001 8.70914 8.00001 6.5C8.00001 4.29086 9.79087 2.5 12 2.5C14.2091 2.5 16 4.29086 16 6.5Z" stroke="#000000" stroke-linecap="round" stroke-width="1.8"/></svg>
-                <a href="">Try Me</a>
-              </button>
+                <span>Try Me</span>
+              </a>
             </div>
         </div>
     </section>
-    <section class="equinox_offer_page">
+    <section class="equinox_offer_page" id="features">
         <h3 class="offer_title">Why Equinox?</h3>
         <div class="equinox_desc">
           <p>Equinox is a feature-rich <span class="highlight">Discord bot</span> that combines <span class="highlight">moderation</span> tools for maintaining order, an advanced <span class="highlight">giveaway</span> system for community engagement, a <span class="highlight">ticket</span> system for support management, built-in server <span class="highlight">protection</span> and automation to keep communities safe, comprehensive <span class="highlight">utility</span> commands for convenience and customization, and an interactive gacha-style <span class="highlight">game</span> that adds a fun, collectible experience for users.</p>
@@ -279,7 +284,7 @@
             <div class="features_list">
               <div class="features_header">
                 <h4>Giveaway system</h4>
-                <button class="features_button"><a href="docs.html">Learn More</a></button>
+                <a class="features_button" href="docs.html"><span>Learn More</span></a>
               </div>
               <ul class="feature_list_contents">
                 <li>Real time management, all the way from 30 seconds to 6 days.</li>
@@ -290,17 +295,17 @@
               </ul>
             </div>
             <div class="features_img">
-              <img src="images/features_image.png" alt="">
+              <img src="images/features_image.png" alt="Giveaway system screenshot" loading="lazy">
             </div>
           </div>
           <div class="features_card">
             <div class="features_img image_second">
-              <img src="images/features_image_1.png" alt="">
+              <img src="images/features_image_1.png" alt="Ticket system embed preview" loading="lazy">
             </div>
             <div class="features_list features_list_reversed">
               <div class="features_header">
                 <h4>Ticket system</h4>
-                <button class="features_button"><a href="docs.html">Learn More</a></button>
+                <a class="features_button" href="docs.html"><span>Learn More</span></a>
               </div>
               <div class="features_image_with_list">
                 <ul class="feature_list_contents reversed_features_list">
@@ -311,8 +316,8 @@
                   <li>Super quick and easy ticket creation and management.</li>
                 </ul>
                 <div class="feature_image_bottom">
-                  <img class="second_feature_image" src="images/features_image_2.png" alt="">
-                  <img class="third_feature_image" src="images/features_image_3.png" alt="">
+                   <img class="second_feature_image" src="images/features_image_2.png" alt="Ticket creation panel" loading="lazy">
+                   <img class="third_feature_image" src="images/features_image_3.png" alt="Ticket management interface" loading="lazy">
                 </div>
               </div>
             </div>
@@ -321,7 +326,7 @@
             <div class="features_list">
               <div class="features_header">
                 <h4>Verification system</h4>
-                <button class="features_button"><a href="docs.html">Learn More</a></button>
+                <a class="features_button" href="docs.html"><span>Learn More</span></a>
               </div>
               <ul class="feature_list_contents">
                 <li>Secure servers from raids/botting.</li>
@@ -332,18 +337,18 @@
               </ul>
             </div>
             <div class="features_img verification_img">
-              <img src="images/features_image4.png" alt="">
-              <img src="images/features_image_5.png" alt="">
+              <img src="images/features_image4.png" alt="Verification captcha screen" loading="lazy">
+              <img src="images/features_image_5.png" alt="Verification settings panel" loading="lazy">
             </div>
           </div>
           <div class="features_card fourth-card">
             <div class="features_img image_third">
-              <img src="images/features_image_6.png" alt="">
+              <img src="images/features_image_6.png" alt="Server protection dashboard" loading="lazy">
             </div>
             <div class="features_list features_list_reversed">
               <div class="features_header">
                 <h4>Server protection</h4>
-                <button class="features_button"><a href="docs.html">Learn More</a></button>
+                <a class="features_button" href="docs.html"><span>Learn More</span></a>
               </div>
               <div class="features_image_with_list">
                 <ul class="feature_list_contents reversed_features_list">
@@ -354,13 +359,36 @@
                   <li>Prioritize privacy, able to turn on and off.</li>
                 </ul>
                 <div class="feature_image_bottom">
-                  <img class="fourth_feature_image" src="images/features_image_7.png" alt="">
+                   <img class="fourth_feature_image" src="images/features_image_7.png" alt="Protection log interface" loading="lazy">
                 </div>
               </div>
             </div>
           </div>
         </div>
     </section>
+    <section class="social-proof">
+      <h3>Trusted by communities</h3>
+      <div class="social-proof-grid">
+        <div class="social-proof-item">
+          <span class="stat" data-count="100" data-suffix="+">0</span>
+          <span class="label">Servers</span>
+        </div>
+        <div class="social-proof-item">
+          <span class="stat" data-count="35000" data-suffix="+">0</span>
+          <span class="label">Users</span>
+        </div>
+        <div class="social-proof-item">
+          <span class="stat" data-count="99.9" data-suffix="%">0</span>
+          <span class="label">Uptime</span>
+        </div>
+      </div>
+    </section>
+    <nav class="mobile-bottom-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <a href="index.html">Home</a>
+      <a href="premium.html">Premium</a>
+      <a href="docs.html">Docs</a>
+      <a href="https://discord.gg/v9uceTfPCY" target="_blank">Support</a>
+    </nav>
     <section>
       <footer class="footer-block">
           <div class="footer-section">
@@ -576,12 +604,17 @@
               </div>
           </div>
           <div class="copyrights">
-              <p>&copy; 2025 Equinox, All Rights Reserved.<p>
+              <p>&copy; <span id="copy-year">2025</span> Equinox, All Rights Reserved.<p>
           </div>
       </footer>
     </section>
-  <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+  <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js" integrity="sha384-cMrTlShXEGSdSFA359p+3aVUxK/R+0TAfbRZMcTlAn8yqzxEDj05QsS65nTFMMj4" crossorigin="anonymous"></script>
   <script src="app.js" defer></script>
+  <div id="cookie-consent" class="cookie-banner" role="dialog" aria-label="Cookie consent" hidden>
+    <p>This site uses cookies for authentication and essential functionality. By continuing, you accept our <a href="privacy.html">Privacy Policy</a>.</p>
+    <button id="cookie-accept" class="premium-button"><span>OK</span></button>
+  </div>
+  <script>document.getElementById('copy-year').textContent=new Date().getFullYear();</script>
 
 </body>
 </html>

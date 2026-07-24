@@ -1,37 +1,31 @@
 import os
 import asyncio
 import secrets
-from urllib.parse import urlencode
-import psycopg
-from fastapi import FastAPI, Request, Response, HTTPException
-from fastapi.responses import RedirectResponse, JSONResponse
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi import APIRouter
-from fastapi import Body
-from fastapi import Header
-import httpx
-import os
-from pathlib import Path
-from dotenv import load_dotenv
+import logging
 import hashlib
 import json
-from fastapi import FastAPI
-import httpx
-from typing import Literal
-import hashlib
-import base64
-from fastapi import Query
-from subscriptions import (
-    add_subscription,
-    user_is_active,
-    grant_subscription_from_webhook,
-    grant_subscription_from_sellauth_webhook
-)
+import re
 from urllib.parse import urlencode, urlparse
 from datetime import datetime, timedelta, timezone
-import re 
-from fastapi import UploadFile, File
+from pathlib import Path
+from typing import Literal
+
+from contextlib import asynccontextmanager
+
+import psycopg
+from psycopg_pool import ConnectionPool
+import httpx
+from dotenv import load_dotenv
+from fastapi import (
+    FastAPI, Request, Response, HTTPException,
+    UploadFile, File, Query, Body,
+)
+from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger("equinox")
 
 discord_rate_limited_until: datetime | None = None
 
@@ -40,13 +34,34 @@ load_dotenv(BASE_DIR / ".env")
 DATABASE_URL = os.getenv("DATABASE_URL")
 REDEEM_CODE_PEPPER = os.getenv("REDEEM_CODE_PEPPER")
 DEV_ID = 857932717681147954
-pending_batches: dict[str, dict] = {}  
+pending_batches: dict[str, dict] = {}
+
+_pool: ConnectionPool | None = None
+
+
+def get_pool() -> ConnectionPool:
+    global _pool
+    if _pool is None:
+        if not DATABASE_URL:
+            raise RuntimeError("DATABASE_URL not set")
+        _pool = ConnectionPool(
+            DATABASE_URL,
+            min_size=2,
+            max_size=10,
+            kwargs={"sslmode": "require"},
+        )
+    return _pool
 
 
 def get_db():
-    if not DATABASE_URL:
-        raise RuntimeError("DATABASE_URL not set")
-    return psycopg.connect(DATABASE_URL, sslmode="require")
+    return get_pool().connection()
+
+
+def _close_pool():
+    global _pool
+    if _pool:
+        _pool.close()
+        _pool = None
 
 
 def db_user_is_active(discord_id: str):
@@ -90,21 +105,28 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:8888")
 
 
 
-print("DEBUG DISCORD_CLIENT_ID:", repr(DISCORD_CLIENT_ID))
-print("DEBUG DISCORD_REDIRECT_URI:", repr(DISCORD_REDIRECT_URI))
-
 if not DISCORD_CLIENT_ID or not DISCORD_CLIENT_SECRET or not DISCORD_REDIRECT_URI:
-    print("⚠️ Set DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_REDIRECT_URI in .env")
+    logger.error("Missing required env: DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_REDIRECT_URI")
+else:
+    logger.info("Discord OAuth configured for redirect: %s", DISCORD_REDIRECT_URI)
 
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    task = asyncio.create_task(prune_expired_subs_loop())
+    logger.info("Equinox backend started")
+    yield
+    task.cancel()
+    _close_pool()
+    logger.info("Equinox backend shut down")
+
+
+app = FastAPI(lifespan=lifespan)
 
 FRONTEND_ORIGINS = [
-    "http://localhost:5500",                 
+    "http://localhost:5500",
     "https://equinoxbot.netlify.app"
 ]
-
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -113,6 +135,35 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Cache-Control"] = "no-store"
+        return response
+
+
+app.add_middleware(SecurityHeadersMiddleware)
+
+
+admin_rate_store: dict[str, list[datetime]] = {}
+
+
+def check_admin_rate(discord_id: str, limit: int = 30, window: int = 60):
+    now = datetime.now(timezone.utc)
+    cutoff = now - timedelta(seconds=window)
+    if discord_id not in admin_rate_store:
+        admin_rate_store[discord_id] = []
+    admin_rate_store[discord_id] = [t for t in admin_rate_store[discord_id] if t > cutoff]
+    if len(admin_rate_store[discord_id]) >= limit:
+        raise HTTPException(429, "Too many admin requests. Slow down.")
+    admin_rate_store[discord_id].append(now)
+
 
 sessions: dict[str, dict] = {}
 used_oauth_states: dict[str, datetime] = {}
@@ -136,31 +187,7 @@ def safe_next(next_url: str | None) -> str:
 
     return FRONTEND_URL
 
-now = datetime.now(timezone.utc)
-if discord_rate_limited_until and discord_rate_limited_until > now:
-    retry_secs = int((discord_rate_limited_until - now).total_seconds())
-    raise HTTPException(
-        status_code=429,
-        detail={"message": "Server temporarily rate-limited by Discord.", "retry_after": retry_secs},
-        headers={"Retry-After": str(retry_secs)},
-    )
-
 discord_rate_limited_until: datetime | None = None
-
-
-def check_discord_cooldown():
-    global discord_rate_limited_until
-    if discord_rate_limited_until:
-        now = datetime.now(timezone.utc)
-        if now < discord_rate_limited_until:
-            retry_secs = int((discord_rate_limited_until - now).total_seconds())
-            print(f"🛑 [BLOCKING] Discord call prevented. Global cooldown active for {retry_secs}s")
-            raise HTTPException(
-                status_code=429,
-                detail={"message": "Global Discord Cooldown", "retry_after": retry_secs}
-            )
-        else:
-            discord_rate_limited_until = None 
 
 
 @app.get("/auth/discord/callback")
@@ -180,30 +207,27 @@ async def discord_callback(
 
     now = datetime.now(timezone.utc)
 
-    
     if discord_rate_limited_until and discord_rate_limited_until > now:
         retry_secs = int((discord_rate_limited_until - now).total_seconds())
-        print(f"🛑 [BLOCKING] Discord call prevented. Global cooldown active for {retry_secs}s")
+        logger.warning("Discord rate limit active for %ds", retry_secs)
         raise HTTPException(
             status_code=429,
             detail={"message": "Server temporarily rate-limited by Discord.", "retry_after": retry_secs},
             headers={"Retry-After": str(retry_secs)},
         )
-        
-    
+
     expiry_limit = now - timedelta(minutes=10)
     for k in [k for k, v in used_oauth_codes.items() if v < expiry_limit]:
         used_oauth_codes.pop(k, None)
     for k in [k for k, v in used_oauth_states.items() if v < expiry_limit]:
         used_oauth_states.pop(k, None)
-    
-    
+
     if code in used_oauth_codes:
-        print(f"⚠️ [DEBUG] Code {code[:5]}... already processed recently. Redirecting.")
+        logger.info("OAuth code replay detected, redirecting")
         return RedirectResponse(FRONTEND_URL)
-        
+
     if not state or state in used_oauth_states:
-        print(f"⚠️ [DEBUG] State {state} invalid or already used. Redirecting.")
+        logger.info("OAuth state invalid or replayed, redirecting")
         return RedirectResponse(FRONTEND_URL)
     
     
@@ -215,8 +239,7 @@ async def discord_callback(
 
     try:
         async with httpx.AsyncClient() as client:
-            
-            print("🚀 [DISCORD CALL] Exchanging code for token...")
+            logger.info("Exchanging OAuth code for Discord token")
             token_res = await client.post(
                 "https://discord.com/api/oauth2/token",
                 data={
@@ -239,7 +262,7 @@ async def discord_callback(
             
                 
                 discord_rate_limited_until = datetime.now(timezone.utc) + timedelta(seconds=retry_after)
-                print(f"❌ [RATE LIMIT] Discord 429 received. Locking calls for {retry_after}s")
+                logger.warning("Discord 429 received, locking for %ds", retry_after)
             
                 used_oauth_codes.pop(code, None)
                 used_oauth_states.pop(state, None)
@@ -254,7 +277,7 @@ async def discord_callback(
             access_token = token_res.json()["access_token"]
 
             
-            print("🚀 [DISCORD CALL] Fetching user profile...")
+            logger.info("Fetching Discord user profile")
             user_res = await client.get(
                 "https://discord.com/api/users/@me",
                 headers={"Authorization": f"Bearer {access_token}"},
@@ -266,7 +289,7 @@ async def discord_callback(
     except httpx.HTTPError as e:
         used_oauth_codes.pop(code, None)
         used_oauth_states.pop(state, None)
-        print(f"❌ [HTTP ERROR] Talk to Discord failed: {e}")
+        logger.error("Discord HTTP error: %s", e)
         raise HTTPException(status_code=500, detail="Communication with Discord failed.")
 
     session_id = secrets.token_urlsafe(32)
@@ -357,10 +380,14 @@ def humanize_remaining(expires_at: datetime, now: datetime) -> str:
 
 
 @app.get("/api/premium/{discord_id}")
-def api_premium(discord_id: str):
-    """
-    Bot and frontend can call this to see if a user is premium.
-    """
+def api_premium(discord_id: str, request: Request):
+    user = get_user_from_session(request)
+    api_key = request.headers.get("X-API-Key")
+    bot_key = os.getenv("BOT_API_KEY")
+
+    if not user and (not bot_key or api_key != bot_key):
+        raise HTTPException(status_code=401, detail="Authentication required")
+
     active, tier, expires = db_user_is_active(discord_id)
     return {
         "premium": active,
@@ -416,7 +443,7 @@ def api_subscription(request: Request):
                     active = expires > now
 
     except Exception as e:
-        print("api_subscription db lookup failed:", e)
+        logger.warning("api_subscription db lookup failed: %s", e)
 
     return {
         "premium": active,
@@ -483,10 +510,11 @@ def me(request: Request):
         "username": user["username"],
         "discriminator": user["discriminator"],
         "avatar": user["avatar"],
-        "avatar_url": make_avatar_url(user),  
+        "avatar_url": make_avatar_url(user),
         "premium": active,
         "tier": tier,
         "expires_at": expires,
+        "is_dev": int(discord_id) == DEV_ID,
     }
 
 @app.get("/api/premium")
@@ -714,7 +742,7 @@ def redeem_code(request: Request, body: dict = Body(...)):
     except HTTPException:
         raise
     except Exception as e:
-        print("REDEEM ERROR:", repr(e))
+        logger.exception("REDEEM ERROR")
         raise HTTPException(status_code=500, detail="Internal server error")
 
     return {"ok": True, "tier": new_tier, "expires_at": new_expires, "discord_id": str(discord_id)}
@@ -737,9 +765,9 @@ async def prune_expired_subs_loop():
                         (now,),
                     )
                 conn.commit()
-            print("[prune] expired subscriptions removed")
+            logger.info("Expired subscriptions pruned")
         except Exception as e:
-            print("[prune] error:", repr(e))
+            logger.warning("Prune error: %s", e)
 
         
         await asyncio.sleep(60 * 60 * 24)
@@ -748,9 +776,7 @@ def require_csrf(request: Request):
     session_id = request.cookies.get("session_id")
     csrf_cookie = request.cookies.get("csrf_token")
     csrf_header = request.headers.get("x-csrf-token")
-    print("[CSRF] cookie:", bool(csrf_cookie), "header:", bool(csrf_header))
     if not csrf_cookie or not csrf_header or csrf_cookie != csrf_header:
-        print("[CSRF] failed")
         raise HTTPException(403, "CSRF check failed")
     if not session_id:
         raise HTTPException(status_code=401, detail="Not logged in")
@@ -767,20 +793,18 @@ def require_csrf(request: Request):
             row = cur.fetchone()
 
     if not row or row[0] != csrf_header or csrf_cookie != csrf_header:
-        raise HTTPException(status_code=403, detail="CSRF validation failed")        
+        raise HTTPException(status_code=403, detail="CSRF validation failed")
         
 DEV_DISCORD_ID = "857932717681147954"
 
 def require_dev(request: Request) -> str:
     user = get_user_from_session(request)
     if not user:
-        print("[DEV] no session user")
         raise HTTPException(401, "Not logged in")
     discord_id = str(user["id"])
-    print("[DEV] user id:", discord_id)
     if discord_id != DEV_DISCORD_ID:
-        print("[DEV] forbidden: not dev")
         raise HTTPException(403, "Forbidden")
+    check_admin_rate(discord_id)
     return discord_id
 
 @app.post("/api/admin/import-codes")
@@ -1319,13 +1343,14 @@ def admin_reject_generated(request: Request, body: dict = Body(...)):
     return {"ok": True}
 
 
-@app.on_event("startup")
-async def startup_tasks():
-    asyncio.create_task(prune_expired_subs_loop())
-
 @app.get("/")
 async def root():
     return {"ok": True}
+
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
 
 
 if __name__ == "__main__":
