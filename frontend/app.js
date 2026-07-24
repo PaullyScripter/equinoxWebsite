@@ -1036,7 +1036,7 @@ document.addEventListener("DOMContentLoaded", () => {
 (function () {
   let target = window.scrollY;
   let animating = false;
-  const ease = 0.2;
+  const ease = 0.5;
 
   function tick() {
     const current = window.scrollY;
