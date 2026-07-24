@@ -1032,34 +1032,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.head.appendChild(style);
 })();
 
-// ── Smooth momentum scrolling ──
-(function () {
-  let target = window.scrollY;
-  let animating = false;
-  const ease = 0.5;
 
-  function tick() {
-    const current = window.scrollY;
-    const diff = target - current;
-    if (Math.abs(diff) < 0.5) {
-      window.scrollTo(0, Math.round(target));
-      animating = false;
-      return;
-    }
-    window.scrollTo(0, current + diff * ease);
-    requestAnimationFrame(tick);
-  }
-
-  window.addEventListener("wheel", function (e) {
-    e.preventDefault();
-    target += e.deltaY;
-    target = Math.max(0, Math.min(target, document.body.scrollHeight - window.innerHeight));
-    if (!animating) {
-      animating = true;
-      requestAnimationFrame(tick);
-    }
-  }, { passive: false });
-})();
 
 // ── Feature image parallax ──
 (function () {
