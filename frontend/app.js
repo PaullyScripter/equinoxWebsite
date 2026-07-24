@@ -1032,17 +1032,40 @@ document.addEventListener("DOMContentLoaded", () => {
   document.head.appendChild(style);
 })();
 
-// ── "Try Me" smooth scroll ──
+// ── Smooth wheel scrolling ──
 (function () {
-  const btn = document.querySelector('.homepage-invite-button[href="#features"]');
-  if (!btn) return;
-  btn.addEventListener("click", (e) => {
-    const target = document.getElementById("features");
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: "smooth" });
+  let target = window.scrollY;
+  let current = target;
+  let rafId = null;
+
+  function lerp(start, end, factor) {
+    return start + (end - start) * factor;
+  }
+
+  function animate() {
+    current = lerp(current, target, 0.12);
+    window.scrollTo(0, Math.round(current));
+    if (Math.abs(target - current) > 0.5) {
+      rafId = requestAnimationFrame(animate);
+    } else {
+      rafId = null;
     }
-  });
+  }
+
+  function startAnimation() {
+    if (!rafId) {
+      rafId = requestAnimationFrame(animate);
+    }
+  }
+
+  window.addEventListener("wheel", function (e) {
+    e.preventDefault();
+    target += e.deltaY;
+    target = Math.max(0, Math.min(target, document.body.scrollHeight - window.innerHeight));
+    startAnimation();
+  }, { passive: false });
+
+  document.addEventListener("touchmove", function (e) {}, { passive: false });
 })();
 
 // ── Feature image parallax ──
