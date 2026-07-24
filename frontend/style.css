@@ -683,7 +683,37 @@ body.no-scroll { overflow: hidden; }
 
 #splash.splash-hidden {
   opacity: 0;
+  transform: scale(1.05);
   pointer-events: none;
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+#splash-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--yellow-accent);
+  width: 0%;
+  z-index: 200001;
+  transition: none;
+}
+
+#splash-logo {
+  position: fixed;
+  left: 50%;
+  bottom: 18%;
+  transform: translate(-50%, 10px);
+  width: 48px;
+  height: 48px;
+  opacity: 0;
+  z-index: 200001;
+  transition: opacity 500ms ease, transform 500ms ease;
+  pointer-events: none;
+}
+#splash-logo.visible {
+  opacity: 0.6;
+  transform: translate(-50%, 0);
 }
 
 /* The title will be absolutely positioned by JS */

@@ -228,17 +228,17 @@ window.addEventListener("scroll", function () {
 })();
 
 // ===============================
-// Splash screen: pixel-perfect overlay on final .homepage_title
+// Splash screen: scramble animation with loading bar, logo reveal, scale+fade exit
 // ===============================
 (function(){
   const splash = document.getElementById('splash');
   const splashTitle = document.getElementById('splash-title');
+  const splashBar = document.getElementById('splash-bar');
+  const splashLogo = document.getElementById('splash-logo');
   const target = document.querySelector('.homepage_title');
   if (!splash || !splashTitle || !target) return;
 
-  // 👉 Gate: show once per tab session (reload won't re-show; new tab will)
   if (sessionStorage.getItem('splashShown') === '1') {
-    // Ensure page is scrollable if we bail out
     splash.remove();
     document.body.classList.remove('no-scroll');
     document.documentElement.classList.remove('no-scroll');
@@ -248,107 +248,111 @@ window.addEventListener("scroll", function () {
   document.body.classList.add('no-scroll');
   document.documentElement.classList.add('no-scroll');
 
-
-
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) {
+    splash.remove();
+    document.body.classList.remove('no-scroll');
+    document.documentElement.classList.remove('no-scroll');
+    window.dispatchEvent(new CustomEvent("equinox:splash-ended"));
+    return;
+  }
 
-  // Utility: round to device pixels to avoid subpixel blur/drift
   const px = (v) => {
     const dpr = window.devicePixelRatio || 1;
     return Math.round(v * dpr) / dpr;
   };
 
-  // Copy a thorough set of text/typography properties
   function copyTypography(from, to){
     const cs = getComputedStyle(from);
     const props = [
-      // Font & metrics
       "font", "fontFamily", "fontSize", "fontWeight", "fontStyle", "fontStretch", "fontVariant",
-      "lineHeight",
-      // Spacing/shaping
-      "letterSpacing", "wordSpacing", "textTransform", "textRendering", "fontKerning",
+      "lineHeight", "letterSpacing", "wordSpacing", "textTransform", "textRendering", "fontKerning",
       "fontFeatureSettings", "fontVariantLigatures",
-      // Decoration/paint
       "textShadow", "textDecoration", "textDecorationThickness",
-      // Alignment
       "textAlign", "direction"
     ];
     props.forEach(p => to.style[p] = cs[p]);
   }
 
-  // Measure the exact on-screen box for the first glyph of the H1 line
   function measureTarget(){
-    // Prefer a range around the first character to avoid padding/border
     const range = document.createRange();
-    // If the H1 contains spans, select contents; range rects reflect real glyph boxes
     range.selectNodeContents(target);
     const rects = range.getClientRects();
     const rWhole = target.getBoundingClientRect();
-    // Use the first non-empty rect; fallback to the whole element if needed
     const r = Array.from(rects).find(rr => rr.width > 0 && rr.height > 0) || rWhole;
     return r;
   }
 
   function syncSplashPosition(){
-    // ensure fonts loaded and layout stable
     const r = measureTarget();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
-    copyTypography(target, splashTitle);
-
-    // Lock positioning
-    splashTitle.style.position = "fixed";
-    splashTitle.style.whiteSpace = "nowrap"; // prevent wrapping drift
-    splashTitle.style.margin = "0";
-    splashTitle.style.padding = "0";
-
-    // If the target is center/right-aligned, we still position by its left edge.
-    // That's visually correct because rect is post-layout.
-    splashTitle.style.left = px(r.left) + "px";
-    splashTitle.style.top  = px(r.top)  + "px";
-    // Set an explicit width so letterSpacing differences don't reflow during scramble
-    splashTitle.style.width = px(r.width) + "px";
-    splashTitle.style.height = px(r.height) + "px";
-
-    // If the target has a transform, rect already includes it.
-    // But to match sub-pixel rendering, also mirror transform-origin.
-    const cs = getComputedStyle(target);
-    splashTitle.style.transformOrigin = cs.transformOrigin || "left top";
-
-    // Make sure it uses the same font color while on black
+    // Fallback: center if target is off-screen or below fold
+    if (r.left < 0 || r.top < 0 || r.top > vh || r.left > vw) {
+      splashTitle.style.left = "50%";
+      splashTitle.style.top  = "50%";
+      splashTitle.style.transform = "translate(-50%, -50%)";
+      splashTitle.style.width = "auto";
+      splashTitle.style.height = "auto";
+      splashTitle.style.transformOrigin = "center center";
+    } else {
+      copyTypography(target, splashTitle);
+      splashTitle.style.position = "fixed";
+      splashTitle.style.whiteSpace = "nowrap";
+      splashTitle.style.margin = "0";
+      splashTitle.style.padding = "0";
+      splashTitle.style.transform = "none";
+      splashTitle.style.left = px(r.left) + "px";
+      splashTitle.style.top  = px(r.top)  + "px";
+      splashTitle.style.width = px(r.width) + "px";
+      splashTitle.style.height = px(r.height) + "px";
+      const cs = getComputedStyle(target);
+      splashTitle.style.transformOrigin = cs.transformOrigin || "left top";
+    }
     splashTitle.style.color = "#fff";
   }
 
-  // Keep synced while the splash is visible
+  // Debounced ResizeObserver + resize (rAF throttled)
   let ro;
+  let syncPending = false;
+  function syncRAF() {
+    if (syncPending) return;
+    syncPending = true;
+    requestAnimationFrame(() => {
+      syncSplashPosition();
+      syncPending = false;
+    });
+  }
+
   function bindObservers(){
-    ro = new ResizeObserver(syncSplashPosition);
+    ro = new ResizeObserver(syncRAF);
     ro.observe(document.documentElement);
     ro.observe(document.body);
     ro.observe(target);
-    window.addEventListener("resize", syncSplashPosition);
-    window.addEventListener("scroll", syncSplashPosition, { passive: true });
-  }
-  function unbindObservers(){
-    if (ro) ro.disconnect();
-    window.removeEventListener("resize", syncSplashPosition);
-    window.removeEventListener("scroll", syncSplashPosition);
+    window.addEventListener("resize", syncRAF);
   }
 
-  // --- scramble effect ---
+  function unbindObservers(){
+    if (ro) ro.disconnect();
+    window.removeEventListener("resize", syncRAF);
+  }
+
   const pool = (() => {
     const latin = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const digits = "0123456789";
-    const symbols = `!@#$%^&*()_+-=[]{}|;:'",.<>/?~•◈◇◆★☆✦✧`;
+    const symbols = "!@#$%^&*()_+-=[]{}|;:'\",.<>/?~•◈◇◆★☆✦✧";
     const greekLower = "αβγδεζηθικλμνξοπρστυφχψω";
     const greekUpper = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
     return latin + digits + symbols + greekLower + greekUpper;
   })();
 
-  const targetText = "Σquinϕx"; // splash word (your .homepage_title keeps its original styled content)
-  const duration = 1200; // ms
+  const targetText = "Σquinϕx";
+  const duration = 1200;
   const fps = 60;
   const steps = Math.max(12, Math.floor((duration / 1000) * fps));
   const length = targetText.length;
+  const frameInterval = 1000 / fps;
 
   function endSplash() {
     unbindObservers();
@@ -356,59 +360,75 @@ window.addEventListener("scroll", function () {
       splash.classList.add('splash-hidden');
       document.body.classList.remove('no-scroll');
       document.documentElement.classList.remove('no-scroll');
-
-      // tell the rest of the page the splash is done
       window.dispatchEvent(new CustomEvent("equinox:splash-ended"));
-
       setTimeout(() => splash.remove(), 650);
     });
-}
-
-
-  if (reduceMotion){
-    // Still align perfectly, but skip animation
-    (document.fonts?.ready || Promise.resolve()).then(() => {
-      splashTitle.textContent = targetText;
-      syncSplashPosition();
-      endSplash();
-    });
-    return;
   }
 
-  // Wait for fonts to load, then align and animate
+  function showLogo() {
+    if (!splashLogo) return;
+    // Clone the nav logo SVG into the splash-logo container
+    const logoSrc = document.querySelector('.logo svg');
+    if (logoSrc) {
+      splashLogo.innerHTML = '';
+      splashLogo.appendChild(logoSrc.cloneNode(true));
+    }
+    splashLogo.classList.add('visible');
+  }
+
   (document.fonts?.ready || Promise.resolve()).then(() => {
-    // One rAF for layout settle, then sync
     requestAnimationFrame(() => {
       syncSplashPosition();
+      // Override to left-align during scramble so changing characters don't shift
+      // the visual center (fixed-width container prevents horizontal jitter)
+      splashTitle.style.textAlign = "left";
       bindObservers();
 
       let frame = 0;
-      (function scramble(){
-        frame++;
-        const lockCount = Math.floor((frame / steps) * length);
-        let out = "";
+      let lastTime = performance.now();
 
-        for (let i = 0; i < length; i++) {
-          const ch = targetText[i];
-          if (/\s/.test(ch) || i < lockCount) {
-            out += ch;
-          } else {
-            const greek = "αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
-            out += Math.random() < 0.15
-              ? greek[(Math.random() * greek.length) | 0]
-              : pool[(Math.random() * pool.length) | 0];
+      function scramble(now) {
+        const elapsed = now - lastTime;
+        if (elapsed >= frameInterval) {
+          lastTime = now - (elapsed % frameInterval);
+          frame++;
+          const lockCount = Math.floor((frame / steps) * length);
+          let out = "";
+
+          for (let i = 0; i < length; i++) {
+            const ch = targetText[i];
+            if (/\s/.test(ch) || i < lockCount) {
+              out += ch;
+            } else {
+              const greek = "αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
+              out += Math.random() < 0.15
+                ? greek[(Math.random() * greek.length) | 0]
+                : pool[(Math.random() * pool.length) | 0];
+            }
+          }
+
+          splashTitle.textContent = out;
+
+          if (splashBar) {
+            const progress = Math.min(100, (frame / steps) * 100);
+            splashBar.style.width = progress + "%";
           }
         }
 
-        splashTitle.textContent = out;
-
         if (frame < steps) {
-          setTimeout(scramble, (1000 / fps) + (4 + Math.random() * 10));
+          requestAnimationFrame(scramble);
         } else {
+          unbindObservers();
+          // Restore center alignment — same font, same container, exact position match
+          splashTitle.style.textAlign = "center";
           splashTitle.textContent = targetText;
+          if (splashBar) splashBar.style.width = "100%";
+          showLogo();
           setTimeout(endSplash, 600);
         }
-      })();
+      }
+
+      requestAnimationFrame(scramble);
     });
   });
 })();
