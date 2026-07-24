@@ -1218,8 +1218,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 })();
 
-// ── Premium card 3D tilt ──
+// ── Premium card 3D tilt (mouse only) ──
 (function () {
+  if (!window.matchMedia("(hover: hover)").matches) return;
   document.querySelectorAll(".premium-box").forEach(card => {
     card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();

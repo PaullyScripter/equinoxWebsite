@@ -277,6 +277,11 @@ a.homepage-invite-button {
   text-decoration: none;
 }
 
+a.homepage-invite-button > span {
+  position: relative;
+  z-index: 2;
+}
+
 #login-label {
   z-index: 100;
 }
@@ -2694,4 +2699,25 @@ body.page-transition-in { opacity: 1; transition: opacity 180ms ease; }
   height: 100%;
   pointer-events: none;
   z-index: 0;
+}
+
+/* ── Touch devices: disable all hover effects ── */
+@media (hover: none) {
+  .login-button:hover, a.login-button:hover { color: #fff; }
+  .login-button:hover::before, a.login-button:hover::before { transform: scaleY(0); }
+  a.premium-button:hover { color: var(--yellow-accent); border-color: var(--yellow-accent); }
+  a.premium-button:hover::before { transform: scaleY(0); }
+  a.premium-button { animation: none; }
+  a.features_button:hover { color: #fff; }
+  a.features_button:hover::before { transform: scaleY(0); }
+  a.homepage-invite-button:hover { color: var(--white-background); }
+  .subscribe-btn:hover { color: var(--white-background); }
+  .subscribe-btn:hover::before { width: 0%; }
+  .best-deal .subscribe-btn:hover { color: var(--yellow-accent); }
+  .navigation_links > .nav-group > a:not(.premium-button):hover { color: inherit; }
+  .contact-btn:hover { color: inherit; }
+  .footer-links-box:hover { border-bottom-color: transparent; }
+  .footer-links-box:hover a { font-size: 1em; }
+  .footer-logo:hover { filter: none; transform: none; }
+  .best-deal:hover { box-shadow: none; }
 }
