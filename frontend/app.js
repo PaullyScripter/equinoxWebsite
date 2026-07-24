@@ -1034,28 +1034,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ── Smooth momentum scrolling ──
 (function () {
-  let vel = 0;
-  let pos = window.scrollY;
+  let target = window.scrollY;
   let animating = false;
-  const friction = 0.88;
-  const sensitivity = 0.6;
+  const ease = 0.2;
 
   function tick() {
-    vel *= friction;
-    pos += vel;
-    pos = Math.max(0, Math.min(pos, document.body.scrollHeight - window.innerHeight));
-    window.scrollTo(0, Math.round(pos));
-    if (Math.abs(vel) > 0.1) {
-      requestAnimationFrame(tick);
-    } else {
+    const current = window.scrollY;
+    const diff = target - current;
+    if (Math.abs(diff) < 0.5) {
+      window.scrollTo(0, Math.round(target));
       animating = false;
+      return;
     }
+    window.scrollTo(0, current + diff * ease);
+    requestAnimationFrame(tick);
   }
 
   window.addEventListener("wheel", function (e) {
     e.preventDefault();
-    pos = window.scrollY;
-    vel += e.deltaY * sensitivity;
+    target += e.deltaY;
+    target = Math.max(0, Math.min(target, document.body.scrollHeight - window.innerHeight));
     if (!animating) {
       animating = true;
       requestAnimationFrame(tick);
