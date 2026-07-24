@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -536,7 +536,7 @@
     }
 
     function fmt(dt) {
-      if (!dt) return "—";
+      if (!dt) return "-";
       try {
         const d = new Date(dt);
         if (isNaN(d.getTime())) return String(dt);
@@ -572,10 +572,10 @@
         const html = users.map(u => `
           <tr>
             <td>${u.discord_id}</td>
-            <td><span>${u.display_tier || u.tier || "—"}</span></td>
+            <td><span>${u.display_tier || u.tier || "-"}</span></td>
             <td>${fmt(u.redeemed_at)}</td>
             <td>${u.tier === "lifetime" ? "Never" : fmt(u.expires_at)}</td>
-            <td class="muted">${u.code_used || "—"}</td>
+            <td class="muted">${u.code_used || "-"}</td>
             <td>
               <button class="dev-btn danger text-only-button" type="button" data-revoke="${u.discord_id}">Revoke</button>
             </td>
@@ -599,7 +599,7 @@
             <td>${l.discord_id}</td>
             <td>${l.fails}</td>
             <td>${fmt(l.effective_lock_until ?? l.lock_until)}</td>
-            <td><span>${l.lock_type || (l.lock_until ? "auto" : "—")}</span></td>
+            <td><span>${l.lock_type || (l.lock_until ? "auto" : "-")}</span></td>
             <td class="muted">${fmt(l.updated_at)}</td>
           </tr>
         `).join("");

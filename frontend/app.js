@@ -1,5 +1,5 @@
-if (window.__equinox_app_loaded) {
-  console.warn("app.js loaded twice — skipping init");
+﻿if (window.__equinox_app_loaded) {
+  console.warn("app.js loaded twice - skipping init");
   throw new Error("Duplicate app.js load prevented");
 }
 window.__equinox_app_loaded = true;
@@ -421,7 +421,7 @@ window.addEventListener("scroll", function () {
           requestAnimationFrame(scramble);
         } else {
           unbindObservers();
-          // Restore center alignment — same font, same container, exact position match
+          // Restore center alignment - same font, same container, exact position match
           splashTitle.style.textAlign = "center";
           splashTitle.textContent = targetText;
           if (splashBar) splashBar.style.width = "100%";
@@ -776,8 +776,8 @@ async function initSubscriptionPage() {
   const niceTier = sub.tier ? sub.tier.charAt(0).toUpperCase() + sub.tier.slice(1) : "Premium";
   if (statusEl) statusEl.textContent = `Status: Premium (${niceTier})`;
 
-  const started = sub.started_at ? new Date(sub.started_at).toLocaleString() : "—";
-  const ends = sub.expires_at ? new Date(sub.expires_at).toLocaleString() : "—";
+  const started = sub.started_at ? new Date(sub.started_at).toLocaleString() : "-";
+  const ends = sub.expires_at ? new Date(sub.expires_at).toLocaleString() : "-";
   const codeUsed = sub.code_used || "Hidden";
 
   if (detailsEl) {

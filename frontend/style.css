@@ -1,4 +1,4 @@
-*{
+﻿*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -2467,7 +2467,7 @@ body.modal-open {
     flex: 1 1 auto !important;
   }
 }
-/* Redeem code — stack into 4 columns (mobile/tablet only) and hide dashes */
+/* Redeem code - stack into 4 columns (mobile/tablet only) and hide dashes */
 @media (max-width: 900px) {
   /* switch the row into a responsive 4-column grid so the 16 inputs become 4 rows of 4 */
   .code-row {
