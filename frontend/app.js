@@ -1124,27 +1124,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 })();
 
-// ── Testimonials carousel ──
-(function () {
-  const track = document.getElementById("testimonial-track");
-  const dots = document.getElementById("testimonial-dots");
-  if (!track || !dots) return;
-  const cards = track.querySelectorAll(".testimonial-card");
-  let idx = 0;
-  cards.forEach((_, i) => {
-    const btn = document.createElement("button");
-    if (i === 0) btn.classList.add("active");
-    btn.addEventListener("click", () => goTo(i));
-    dots.appendChild(btn);
-  });
-  function goTo(i) {
-    idx = i;
-    track.style.transform = `translateX(-${idx * 100}%)`;
-    dots.querySelectorAll("button").forEach((b, j) => b.classList.toggle("active", j === idx));
-  }
-  setInterval(() => goTo((idx + 1) % cards.length), 5000);
-})();
-
 // ── FAQ accordion ──
 (function () {
   document.querySelectorAll(".faq-question").forEach(btn => {

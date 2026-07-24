@@ -2502,15 +2502,6 @@ body.modal-open {
   }
 }
 
-/* ── Feature card hover lift ── */
-.features_card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.features_card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 32px rgba(255, 255, 0, 0.08);
-}
-
 /* ── Custom scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #0f0f0f; }
