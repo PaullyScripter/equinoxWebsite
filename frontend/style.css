@@ -2501,3 +2501,209 @@ body.modal-open {
     .code-box { max-width: 52px !important; height: 48px !important; font-size: 18px !important; }
   }
 }
+
+/* ── Feature card hover lift ── */
+.features_card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.features_card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(255, 255, 0, 0.08);
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f0f0f; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 0, 0.25); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 0, 0.5); }
+
+/* ── Footer icon hover glow ── */
+.footer-logo {
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+.footer-logo:hover {
+  filter: drop-shadow(0 0 18px rgba(255, 255, 0, 0.5));
+  transform: scale(1.08);
+}
+
+/* ── Nav bar frosted glass on scroll ── */
+.navigation_bar-colored {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ── Premium button idle pulse ── */
+@keyframes premium-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 255, 0, 0.15); }
+}
+a.premium-button {
+  animation: premium-pulse 3s ease-in-out infinite;
+}
+a.premium-button:hover {
+  animation: none;
+}
+
+/* ── Page transition crossfade ── */
+body.page-transition-out { opacity: 0; transition: opacity 180ms ease; }
+body.page-transition-in { opacity: 1; transition: opacity 180ms ease; }
+
+/* ── Redeem input shake ── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+.code-box.shake {
+  animation: shake 0.4s ease;
+  border-color: rgba(255, 80, 80, 0.9) !important;
+}
+
+/* ── Mobile bottom nav ── */
+@media (max-width: 1000px) {
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 9999;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 1rem;
+  }
+  .mobile-bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .mobile-bottom-nav a.active { color: var(--yellow-accent); }
+  body { padding-bottom: 56px; }
+}
+
+/* ── Social proof section ── */
+.social-proof {
+  background: #000;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.social-proof h3 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+.social-proof .stat { font-size: 3.5rem; font-weight: 800; color: var(--yellow-accent); }
+.social-proof .label { font-size: 0.95rem; color: rgba(255,255,255,0.6); }
+.social-proof-grid {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+.social-proof-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ── Testimonials carousel ── */
+.testimonials {
+  background: #0a0a0a;
+  padding: 4rem 2rem;
+  text-align: center;
+  overflow: hidden;
+}
+.testimonials h3 { font-size: 1.8rem; margin-bottom: 2rem; }
+.testimonial-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.testimonial-card {
+  min-width: 100%;
+  padding: 0 2rem;
+}
+.testimonial-card blockquote {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.85);
+  max-width: 650px;
+  margin: 0 auto 1rem;
+}
+.testimonial-card cite {
+  font-size: 0.85rem;
+  color: var(--yellow-accent);
+  font-style: normal;
+}
+.testimonial-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+.testimonial-dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.testimonial-dots button.active { background: var(--yellow-accent); }
+
+/* ── FAQ accordion ── */
+.faq-section { background: #000; padding: 4rem 2rem; }
+.faq-wrap { max-width: 800px; margin: 0 auto; }
+.faq-wrap h3 { font-size: 1.8rem; text-align: center; margin-bottom: 2rem; }
+.faq-item { border-bottom: 1px solid rgba(255,255,255,0.08); }
+.faq-question {
+  width: 100%;
+  text-align: left;
+  padding: 1.2rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+.faq-question:hover { color: var(--yellow-accent); }
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+.faq-answer p {
+  padding-bottom: 1rem;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+}
+.faq-item.open .faq-answer { max-height: 200px; }
+.faq-item.open .faq-question { color: var(--yellow-accent); }
+
+/* ── Canvas particle layer ── */
+#particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}

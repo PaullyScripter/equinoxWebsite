@@ -1035,6 +1035,209 @@ document.addEventListener("DOMContentLoaded", () => {
   protectDeveloperPage();
 });
 
+// ── Typed.js cursor color ──
+(function () {
+  if (typeof Typed === "undefined") return;
+  const style = document.createElement("style");
+  style.textContent = ".typed-cursor { color: var(--yellow-accent); }";
+  document.head.appendChild(style);
+})();
+
+// ── "Try Me" smooth scroll ──
+(function () {
+  const btn = document.querySelector('.homepage-invite-button[href="#features"]');
+  if (!btn) return;
+  btn.addEventListener("click", (e) => {
+    const target = document.getElementById("features");
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth" });
+    }
+  });
+})();
+
+// ── Feature image parallax ──
+(function () {
+  const cards = document.querySelectorAll(".features_card");
+  if (!cards.length) return;
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        cards.forEach(card => {
+          const imgs = card.querySelectorAll(".features_img img, .second_feature_image, .third_feature_image, .fourth_feature_image");
+          const rect = card.getBoundingClientRect();
+          const center = rect.top + rect.height / 2;
+          const viewCenter = window.innerHeight / 2;
+          const offset = (center - viewCenter) * 0.05;
+          imgs.forEach(img => { img.style.transform = `translateY(${offset}px)`; });
+        });
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
+// ── Page transitions ──
+(function () {
+  if (sessionStorage.getItem("splashShown") !== "1") return;
+  document.body.style.opacity = "0";
+  requestAnimationFrame(() => {
+    document.body.style.opacity = "1";
+    document.body.classList.add("page-transition-in");
+  });
+  document.querySelectorAll("a").forEach(a => {
+    if (a.hostname === window.location.hostname && !a.hasAttribute("target")) {
+      a.addEventListener("click", function (e) {
+        const href = this.getAttribute("href");
+        if (!href || href.startsWith("#")) return;
+        e.preventDefault();
+        document.body.classList.add("page-transition-out");
+        setTimeout(() => { window.location.href = href; }, 180);
+      });
+    }
+  });
+})();
+
+// ── Redeem code shake on error ──
+(function () {
+  const redeemBtn = document.getElementById("redeem-btn");
+  if (!redeemBtn) return;
+  const origClick = redeemBtn.onclick;
+  redeemBtn.addEventListener("click", async function (e) {
+    const code = getRedeemCodeFormatted();
+    if (!code) return;
+    try {
+      const res = await fetch("/api/redeem", {
+        method: "POST", credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      if (!res.ok) {
+        document.querySelectorAll(".code-box").forEach(b => {
+          b.classList.add("shake");
+          setTimeout(() => b.classList.remove("shake"), 400);
+        });
+      }
+    } catch {}
+  });
+})();
+
+// ── Testimonials carousel ──
+(function () {
+  const track = document.getElementById("testimonial-track");
+  const dots = document.getElementById("testimonial-dots");
+  if (!track || !dots) return;
+  const cards = track.querySelectorAll(".testimonial-card");
+  let idx = 0;
+  cards.forEach((_, i) => {
+    const btn = document.createElement("button");
+    if (i === 0) btn.classList.add("active");
+    btn.addEventListener("click", () => goTo(i));
+    dots.appendChild(btn);
+  });
+  function goTo(i) {
+    idx = i;
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    dots.querySelectorAll("button").forEach((b, j) => b.classList.toggle("active", j === idx));
+  }
+  setInterval(() => goTo((idx + 1) % cards.length), 5000);
+})();
+
+// ── FAQ accordion ──
+(function () {
+  document.querySelectorAll(".faq-question").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains("open");
+      document.querySelectorAll(".faq-item.open").forEach(i => i.classList.remove("open"));
+      if (!wasOpen) item.classList.add("open");
+    });
+  });
+})();
+
+// ── Canvas particle background ──
+(function () {
+  const canvas = document.getElementById("particle-canvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  let w, h, particles = [];
+  function resize() {
+    const parent = canvas.parentElement;
+    w = parent.offsetWidth;
+    h = parent.offsetHeight;
+    canvas.width = w;
+    canvas.height = h;
+    particles = Array.from({ length: 40 }, () => ({
+      x: Math.random() * w, y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.2 + 0.3, o: Math.random() * 0.25
+    }));
+  }
+  resize();
+  window.addEventListener("resize", resize);
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${p.o})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── Social proof number counter ──
+(function () {
+  const stats = document.querySelectorAll(".social-proof .stat");
+  if (!stats.length) return;
+  let counted = false;
+  window.addEventListener("scroll", () => {
+    if (counted) return;
+    const el = stats[0].closest(".social-proof");
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.8) {
+      counted = true;
+      stats.forEach(stat => {
+        const target = parseFloat(stat.getAttribute("data-count"));
+        const decimals = target % 1 !== 0 ? 1 : 0;
+        const duration = 1500;
+        let start;
+        function update(ts) {
+          if (!start) start = ts;
+          const progress = Math.min(1, (ts - start) / duration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          stat.textContent = (eased * target).toFixed(decimals);
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      });
+    }
+  }, { passive: true });
+})();
+
+// ── Mobile bottom nav active state ──
+(function () {
+  const nav = document.getElementById("mobile-nav");
+  if (!nav) return;
+  const path = window.location.pathname.toLowerCase();
+  nav.querySelectorAll("a").forEach(a => {
+    if (a.getAttribute("href") && path.includes(a.getAttribute("href").replace(".html", ""))) {
+      a.classList.add("active");
+    }
+  });
+})();
+
 (function () {
   const banner = document.getElementById("cookie-consent");
   const btn = document.getElementById("cookie-accept");
