@@ -1035,18 +1035,30 @@ document.addEventListener("DOMContentLoaded", () => {
 // ── Hero title 3D cursor tracking ──
 (function () {
   const title = document.querySelector('.homepage_title');
-  if (!title) return;
+  const hero = document.querySelector('.homepage');
+  if (!title || !hero) return;
 
   let enabled = !document.body.classList.contains('no-scroll');
 
   function onMouseMove(e) {
     if (!enabled) return;
     const rect = title.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const rotateY = (x / rect.width) * 20;
-    const rotateX = -(y / rect.height) * 20;
-    title.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const dx = e.clientX - centerX;
+    const dy = e.clientY - centerY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const maxDist = Math.max(rect.width, rect.height) * 1.5;
+    if (dist > maxDist) {
+      title.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      return;
+    }
+    const factor = 1 - Math.min(dist / maxDist, 1);
+    const rotateY = (dx / rect.width) * 25 * factor;
+    const rotateX = -(dy / rect.height) * 25 * factor;
+    const clampedY = Math.max(-15, Math.min(15, rotateY));
+    const clampedX = Math.max(-15, Math.min(15, rotateX));
+    title.style.transform = `rotateX(${clampedX}deg) rotateY(${clampedY}deg)`;
   }
 
   function reset() {
@@ -1057,8 +1069,8 @@ document.addEventListener("DOMContentLoaded", () => {
     enabled = true;
   }
 
-  document.addEventListener('mousemove', onMouseMove, { passive: true });
-  document.addEventListener('mouseleave', reset);
+  hero.addEventListener('mousemove', onMouseMove, { passive: true });
+  hero.addEventListener('mouseleave', reset);
   window.addEventListener('equinox:splash-ended', enable);
 })();
 
