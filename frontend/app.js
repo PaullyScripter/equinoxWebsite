@@ -1034,6 +1034,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ── Hero title 3D cursor tracking ──
 (function () {
+  if (window.matchMedia('(hover: none)').matches) return;
   const title = document.querySelector('.homepage_title');
   const hero = document.querySelector('.homepage');
   if (!title || !hero) return;
