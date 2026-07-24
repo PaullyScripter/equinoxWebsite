@@ -1040,9 +1040,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const target = document.getElementById("features");
     if (target) {
       e.preventDefault();
-      setTimeout(() => {
-        target.scrollIntoView({ behavior: "smooth" });
-      }, 300);
+      target.scrollIntoView({ behavior: "smooth" });
     }
   });
 })();
