@@ -5,13 +5,16 @@
     font-family: 'Inter', sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   overflow-y: scroll;
   font-family: "Inter", sans-serif;
   background-color: #0f0f0f;
   color: #fff;
   scrollbar-width: none;
-  scroll-behavior: smooth;
 }
 
 body {
@@ -318,8 +321,8 @@ a.homepage-invite-button > span {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 65%;
-  background: linear-gradient(to bottom, transparent 0%, transparent 30%, var(--black-primary));
+  height: 100%;
+  background: linear-gradient(to bottom, transparent 0%, var(--black-primary) 80%);
   z-index: 0;
   pointer-events: none;
 }
