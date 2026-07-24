@@ -312,6 +312,18 @@ a.homepage-invite-button > span {
   z-index: 0;
 }
 
+.homepage::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, var(--black-primary));
+  z-index: 0;
+  pointer-events: none;
+}
+
 .crescent-i{
   display:inline-block;
   font-family:"CrescentI","Inter",sans-serif; /* your custom i font first */
