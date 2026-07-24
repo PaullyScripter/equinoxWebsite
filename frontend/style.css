@@ -111,8 +111,9 @@ body::-webkit-scrollbar {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 
@@ -143,7 +144,8 @@ body::-webkit-scrollbar {
 
 
 .nav-group-buttons {
-  padding-right: 2.8rem;
+  position: absolute;
+  right: 2.8rem;
 }
 .navigation_links > .nav-group > a:not(.premium-button):hover {
   color: var(--yellow-accent);
@@ -2332,6 +2334,7 @@ body.modal-open {
 
   .nav-group-buttons {
     padding-right: 0;
+    position: static;
   }
   .logo {
       z-index: 10006; /* Ensure it stays above everything */
