@@ -1060,7 +1060,6 @@ body.no-scroll {
 }
 .premium-box {
   transition: transform 0.15s ease-out, box-shadow 0.3s ease;
-  transform-style: preserve-3d;
 }
 
 /* If you want the best-deal to pop a tad more */
