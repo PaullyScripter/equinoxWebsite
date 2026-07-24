@@ -564,65 +564,6 @@ h4 {
   align-items: center;
 }
 
-.features_button {
-  position: relative;
-  overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-  border: 2px solid;
-  background: transparent;
-  transition: color 0.3s ease, border-color 0.3s ease;
-  cursor: pointer;
-  font-size: smaller;
-  height: 2em;
-  width: auto;   
-}
-
-
-.features_button a{
-  text-decoration: none;
-  color: inherit;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-}
-
-.features_button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--white-background);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.35s ease;
-  z-index: 1;
-}
-
-.features_button:hover::before {
-  transform: scaleY(1);
-}
-
-.features_button {
-  color: #fff;
-  border-color: #fff;
-}
-
-.features_button:hover {
-  color: var(--black-primary);
-  border-color: var(--white-background);
-  z-index: 100;
-}
-
-
 .features_image_with_list {
   display: flex;
   flex-direction: column;
