@@ -1935,8 +1935,8 @@ body.no-scroll {
 @media (max-width: 600px) {
   .code-box { width: 40px; height: 40px; font-size: 20px; }
   .code-row { gap: 10px; }
-  .pricing-compare { padding: 2rem 1.5rem 3rem; }
-  .faq-section { padding: 2.5rem 1.5rem; }
+  .pricing-compare { padding: 2rem 2rem 3rem; }
+  .faq-section { padding: 2.5rem 2rem; }
 }
 
 
@@ -2368,8 +2368,8 @@ body.modal-open {
   }
   /* Avoid 100vh clipping on mobile and reduce side padding */
   .premium-page {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
     height: auto;
     min-height: 100vh;
     width: 100%;
@@ -2461,8 +2461,8 @@ body.modal-open {
 @media (max-width: 480px) {
   /* Slightly tighter on very small phones */
   .premium-page {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   .compare-grid {
