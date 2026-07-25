@@ -1,17 +1,20 @@
-﻿*{
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
-  overflow-y: scroll;
+  overflow-y: auto;
   font-family: "Inter", sans-serif;
   background-color: #0f0f0f;
   color: #fff;
   scrollbar-width: none;
-  scroll-behavior: smooth;
 }
 
 body {
@@ -133,14 +136,21 @@ body::-webkit-scrollbar {
 
 .nav-group {
   display: flex;
-  flex-direction: row; /* Keep groups in a line */
+  flex-direction: row;
   align-items: center;
   gap: 0.6rem;
+}
+
+.nav-group:not(.nav-group-buttons) {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 
 .nav-group-buttons {
   padding-right: 2.8rem;
+  margin-left: auto;
 }
 .navigation_links > .nav-group > a:not(.premium-button):hover {
   color: var(--yellow-accent);
@@ -312,6 +322,18 @@ a.homepage-invite-button > span {
   z-index: 0;
 }
 
+.homepage::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 35%;
+  background: linear-gradient(to bottom, transparent, var(--black-primary) 85%);
+  z-index: 0;
+  pointer-events: none;
+}
+
 .crescent-i{
   display:inline-block;
   font-family:"CrescentI","Inter",sans-serif; /* your custom i font first */
@@ -337,17 +359,22 @@ a.homepage-invite-button > span {
   justify-content: center;
   padding-bottom: 6em;
   gap: 1em;
+  perspective: 800px;
 }
 
 
 .homepage_title {
     font-family: "Inter", sans-serif;
     text-align: center;
-    /* clamp(MIN, VAL, MAX) */
     font-size: clamp(4rem, 15vw, 10rem); 
     color: var(--white-background);
     font-weight: bold;
-    width: 100%; /* Ensures it stays centered and contained */
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out, text-shadow 0.1s ease-out;
+    will-change: transform;
+    width: 100%;
+    position: relative;
+    z-index: 2;
 }
 
 .homepage_paragraph {
@@ -1055,16 +1082,14 @@ body.no-scroll {
 }
 
 /* ── Premium card 3D tilt ── */
+.premium-cards {
+  perspective: 800px;
+}
 .premium-cards > div {
   perspective: 800px;
 }
 .premium-box {
-  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
-}
-
-/* If you want the best-deal to pop a tad more */
-.best-deal:hover {
-  transform: scale(1.06);
+  transition: box-shadow 0.3s ease;
 }
 
 /* ── 3D tilt via JS mouse tracking ── */
@@ -2217,6 +2242,10 @@ body.modal-open {
     width: 100% !important;
     gap: 1rem !important;
   }
+  .nav-group:not(.nav-group-buttons) {
+    position: static;
+    transform: none;
+  }
 
   /* Make Login look exactly like Premium */
   .profile-wrapper, .login-button, .premium-button {
@@ -2312,6 +2341,7 @@ body.modal-open {
 
   .nav-group-buttons {
     padding-right: 0;
+    position: static;
   }
   .logo {
       z-index: 10006; /* Ensure it stays above everything */
@@ -2509,11 +2539,16 @@ body.modal-open {
 
 /* ── Footer icon hover glow ── */
 .footer-logo {
-  transition: filter 0.4s ease, transform 0.4s ease;
+  transition: transform 0.4s ease;
 }
 .footer-logo:hover {
-  filter: drop-shadow(0 0 18px rgba(255, 255, 0, 0.5));
   transform: scale(1.08);
+}
+.footer-logo svg path.logo-star {
+  transition: filter 0.4s ease;
+}
+.footer-logo:hover svg path.logo-star {
+  filter: drop-shadow(0 0 18px rgba(255, 255, 0, 0.5));
 }
 
 /* ── Nav bar frosted glass on scroll ── */
@@ -2552,53 +2587,20 @@ body.page-transition-in { opacity: 1; transition: opacity 180ms ease; }
   border-color: rgba(255, 80, 80, 0.9) !important;
 }
 
-/* ── Mobile bottom nav ── */
-.mobile-bottom-nav { display: none; }
-@media (max-width: 1000px) {
-  .mobile-bottom-nav {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 56px;
-    background: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    z-index: 9999;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0 1rem;
-  }
-  .mobile-bottom-nav a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    font-size: 0.65rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-  .mobile-bottom-nav a.active { color: var(--yellow-accent); }
-  body { padding-bottom: 56px; }
-}
-
 /* ── Social proof section ── */
 .social-proof {
   background: #000;
-  padding: 3rem 2rem;
+  padding: clamp(2rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem);
   text-align: center;
 }
-.social-proof h3 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-.social-proof .stat { font-size: 3.5rem; font-weight: 800; color: var(--yellow-accent); }
-.social-proof .label { font-size: 0.95rem; color: rgba(255,255,255,0.6); }
+.social-proof h3 { font-size: clamp(1.1rem, 3.5vw, 2rem); font-weight: 700; margin-bottom: 0.5rem; }
+.social-proof .stat { font-size: clamp(1.6rem, 6vw, 3.5rem); font-weight: 800; color: var(--yellow-accent); }
+.social-proof .label { font-size: clamp(0.65rem, 1.8vw, 0.95rem); color: rgba(255,255,255,0.6); }
 .social-proof-grid {
   display: flex;
   justify-content: center;
-  gap: 4rem;
-  margin-top: 2rem;
+  gap: clamp(1rem, 4vw, 4rem);
+  margin-top: clamp(1rem, 3vw, 2rem);
   flex-wrap: wrap;
 }
 .social-proof-item {
@@ -2716,6 +2718,20 @@ body.page-transition-in { opacity: 1; transition: opacity 180ms ease; }
   .contact-btn:hover { color: inherit; }
   .footer-links-box:hover { border-bottom-color: transparent; }
   .footer-links-box:hover a { font-size: 1em; }
-  .footer-logo:hover { filter: none; transform: none; }
-  .best-deal:hover { box-shadow: none; }
+  .footer-logo:hover { transform: none; }
+  .footer-logo:hover svg path.logo-star { filter: none; }
+  .best-deal:hover { box-shadow: none; transform: none; }
+  .premium-box:hover { transform: none; }
+  .homepage_title { transform: none !important; text-shadow: none !important; transition: none !important; will-change: auto; transform-style: flat; }
+  .paragraph_div { perspective: none; }
+  .homepage-invite-button:hover::before { transform: scaleY(0); }
+  .homepage-invite-button:hover .invite_svg path { stroke: #fff; }
+  .features_img:hover, .second_feature_image:hover, .third_feature_image:hover { transform: none; cursor: default; }
+  .close-modal-fab:hover { background: rgba(255,255,255,.12); }
+  .redeem_button:hover::before { transform: scaleY(0); }
+  .redeem_button:hover { color: var(--yellow-accent); }
+  .close:hover, .close:focus { color: #aaa; }
+  .faq-question:hover { color: inherit; }
+  .premium-button:hover { color: var(--yellow-accent); border-color: var(--yellow-accent); }
+  .premium-button:hover::before { transform: scaleY(0); }
 }

@@ -1,4 +1,4 @@
-﻿if (window.__equinox_app_loaded) {
+if (window.__equinox_app_loaded) {
   console.warn("app.js loaded twice - skipping init");
   throw new Error("Duplicate app.js load prevented");
 }
@@ -41,7 +41,17 @@ async function getMe() {
           return { rate_limited: true, retry_after: retry };
         }
         if (!res.ok) return null;
-        return res.json();
+        const data = await res.json();
+        try { sessionStorage.setItem("equinox_user", JSON.stringify(data)); } catch {}
+        return data;
+      })
+      .catch(function () {
+        try {
+          const stored = sessionStorage.getItem("equinox_user");
+          return stored ? JSON.parse(stored) : null;
+        } catch {
+          return null;
+        }
       })
       .then((data) => (cachedMe = data));
   }
@@ -67,9 +77,24 @@ if (window.Typed && document.querySelector(".typedText")) {
 window.addEventListener("scroll", function () {
   const navBar = document.querySelector(".navigation_bar");
   if (!navBar) return;
+  const path = window.location.pathname.toLowerCase();
+  const isHome = path.endsWith("/") || path.includes("index");
+  if (!isHome) {
+    navBar.classList.add("navigation_bar-colored");
+    return;
+  }
   if (window.pageYOffset > 10) navBar.classList.add("navigation_bar-colored");
   else navBar.classList.remove("navigation_bar-colored");
 });
+
+(function () {
+  const navBar = document.querySelector(".navigation_bar");
+  if (!navBar) return;
+  const path = window.location.pathname.toLowerCase();
+  if (!path.includes("index") && !path.endsWith("/")) {
+    navBar.classList.add("navigation_bar-colored");
+  }
+})();
 
 (function () {
   const selector = ".features_img img, .second_feature_image, .third_feature_image, .fourth_feature_image";
@@ -472,7 +497,7 @@ window.addEventListener("scroll", function () {
 // ===============================
 // Discord Login/Profile Button Logic
 // ===============================
-const BACKEND_URL = "https://premiumbottesting-production.up.railway.app";
+const BACKEND_URL = "http://45.131.65.107:25777";
 
 (function () {
   const profileBtn = document.getElementById("profile-btn");
@@ -612,45 +637,6 @@ const BACKEND_URL = "https://premiumbottesting-production.up.railway.app";
 
 })();
 
-(function () {
-  const purchaseButtons = document.querySelectorAll(".purchase-btn");
-  const statusEl = document.getElementById("status");
-
-  if (!purchaseButtons.length) return;
-
-  async function createSellAuthCheckout(plan) {
-    if (statusEl) statusEl.textContent = `Creating ${plan} checkout...`;
-
-    try {
-      const res = await fetch("/api/sellauth/checkout", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),   // only plan; backend gets user id from cookie
-      });
-
-      if (!res.ok) throw new Error("Failed to create checkout");
-      const data = await res.json();
-
-      if (data.url) {
-        window.location.href = data.url; // go to SellAuth checkout
-      } else if (statusEl) {
-        statusEl.textContent = "Could not get SellAuth checkout URL.";
-      }
-    } catch (err) {
-      console.error(err);
-      if (statusEl) statusEl.textContent = "Error while creating checkout.";
-    }
-  }
-
-  purchaseButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const plan = btn.dataset.plan; // "monthly" | "yearly" | "lifetime"
-      if (plan) createSellAuthCheckout(plan);
-    });
-  });
-})();
-
 
 
 
@@ -694,6 +680,14 @@ async function initPremiumStatusUI() {
     banner.textContent = `You're a premium user, ${displayName}! Thank you for supporting Equinox.`;
     banner.style.display = "block";
   }
+
+  const cards = document.querySelector(".premium-cards");
+  if (cards) {
+    cards.style.setProperty("display", "flex", "important");
+  }
+  document.querySelectorAll(".premium-box").forEach(function (card) {
+    card.style.setProperty("display", "flex", "important");
+  });
 }
 
 // ---------- Thank-you page: protect + fill avatar/name ----------
@@ -1003,12 +997,21 @@ function setupRedeemCodeBoxes() {
 }
 
 
+const DEV_DISCORD_ID = "857932717681147954";
+
+function isDevUser(user) {
+  if (!user) return false;
+  if (user.is_dev) return true;
+  if (String(user.id) === DEV_DISCORD_ID) return true;
+  return false;
+}
+
 async function initDevLink() {
   const devLink = document.getElementById("dev-link");
   if (!devLink) return;
 
   const user = await getMe();
-  if (!user || !user.is_dev) {
+  if (!isDevUser(user)) {
     devLink.classList.add("developer-hidden");
     return;
   }
@@ -1022,7 +1025,8 @@ async function protectDeveloperPage() {
   if (!isDevPage) return;
 
   const user = await getMe();
-  if (!user || !user.is_dev) {
+  if (!user) return;
+  if (!isDevUser(user)) {
     window.location.replace("premium.html");
     return;
   }
@@ -1043,17 +1047,61 @@ document.addEventListener("DOMContentLoaded", () => {
   document.head.appendChild(style);
 })();
 
-// ── "Try Me" smooth scroll ──
+// ── Hero title 3D cursor tracking ──
 (function () {
-  const btn = document.querySelector('.homepage-invite-button[href="#features"]');
-  if (!btn) return;
-  btn.addEventListener("click", (e) => {
-    const target = document.getElementById("features");
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: "smooth" });
+  if (window.matchMedia('(hover: none)').matches) return;
+  const title = document.querySelector('.homepage_title');
+  const hero = document.querySelector('.homepage');
+  if (!title || !hero) return;
+
+  let enabled = !document.body.classList.contains('no-scroll');
+
+  function onMouseMove(e) {
+    if (!enabled) return;
+    const rect = title.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const dx = e.clientX - centerX;
+    const dy = e.clientY - centerY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const maxDist = Math.max(rect.width, rect.height) * 1.5;
+    if (dist > maxDist) {
+      title.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      title.style.textShadow = 'none';
+      return;
     }
-  });
+    const factor = 1 - Math.min(dist / maxDist, 1);
+    const rotateY = (dx / rect.width) * 25 * factor;
+    const rotateX = -(dy / rect.height) * 25 * factor;
+    const clampedY = Math.max(-15, Math.min(15, rotateY));
+    const clampedX = Math.max(-15, Math.min(15, rotateX));
+
+    const sx = clampedY / 15;
+    const sy = -clampedX / 15;
+    const depth = 12;
+    const layers = [];
+    for (let i = 1; i <= depth; i++) {
+      const t = i / depth;
+      const gray = Math.round(180 - t * 120);
+      layers.push(`${Math.round(sx * i)}px ${Math.round(sy * i)}px 0 rgb(${gray},${gray},${gray})`);
+    }
+    layers.push(`${Math.round(sx * depth * 1.2)}px ${Math.round(sy * depth * 1.2)}px ${Math.round(depth)}px rgba(0,0,0,0.35)`);
+    title.style.textShadow = layers.join(', ');
+    title.style.transform = `rotateX(${clampedX}deg) rotateY(${clampedY}deg)`;
+  }
+
+  function reset() {
+    title.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    title.style.textShadow = 'none';
+  }
+
+  function enable() {
+    enabled = true;
+  }
+
+  hero.addEventListener('mousemove', onMouseMove, { passive: true });
+  hero.addEventListener('mouseleave', reset);
+  window.addEventListener('equinox:splash-ended', enable);
 })();
 
 // ── Feature image parallax ──
@@ -1206,29 +1254,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { passive: true });
 })();
 
-// ── Mobile bottom nav active state ──
-(function () {
-  const nav = document.getElementById("mobile-nav");
-  if (!nav) return;
-  const path = window.location.pathname.toLowerCase();
-  nav.querySelectorAll("a").forEach(a => {
-    if (a.getAttribute("href") && path.includes(a.getAttribute("href").replace(".html", ""))) {
-      a.classList.add("active");
-    }
-  });
-})();
-
 // ── Premium card 3D tilt (mouse only) ──
 (function () {
-  if (!window.matchMedia("(hover: hover)").matches) return;
-  document.querySelectorAll(".premium-box").forEach(card => {
+  const cards = document.querySelectorAll(".premium-box");
+  if (!cards.length) return;
+  cards.forEach(card => {
+    card.addEventListener("mouseenter", () => {
+      card.style.transition = "none";
+    });
     card.addEventListener("mousemove", (e) => {
+      if (window.matchMedia("(hover: none)").matches) return;
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      card.style.transform = `scale(1.09) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
+      const isBestDeal = card.classList.contains("best-deal");
+      const baseScale = isBestDeal ? 1.08 : 1.04;
+      card.style.transform = `scale(${baseScale}) rotateY(${x * 30}deg) rotateX(${-y * 30}deg)`;
     });
-    card.addEventListener("mouseleave", () => { card.style.transform = ""; });
+    card.addEventListener("mouseleave", () => {
+      card.style.transition = "transform 0.3s ease-out, box-shadow 0.3s ease";
+      card.style.transform = "";
+    });
   });
 })();
 
