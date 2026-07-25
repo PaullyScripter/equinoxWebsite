@@ -1242,15 +1242,18 @@ document.addEventListener("DOMContentLoaded", () => {
 // ── Premium card 3D tilt (mouse only) ──
 (function () {
   document.querySelectorAll(".premium-box").forEach(card => {
+    card.addEventListener("mouseenter", () => {
+      card.style.transition = "transform 0.1s ease-out, box-shadow 0.3s ease";
+    });
     card.addEventListener("mousemove", (e) => {
       if (window.matchMedia("(hover: none)").matches) return;
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      card.style.transform = `scale(1.09) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
+      card.style.transform = `perspective(800px) scale(1.09) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
     });
     card.addEventListener("mouseleave", () => {
-      if (window.matchMedia("(hover: none)").matches) return;
+      card.style.transition = "transform 0.3s ease-out, box-shadow 0.3s ease";
       card.style.transform = "";
     });
   });
