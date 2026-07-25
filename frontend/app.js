@@ -221,6 +221,8 @@ window.addEventListener("scroll", function () {
   const fps = 60;
   const steps = Math.max(12, Math.floor((duration / 1000) * fps));
   const length = targetText.length;
+  const savedFont = titleEl.style.fontFamily;
+  titleEl.style.fontFamily = "'Courier New', monospace";
 
   let frame = 0;
   const scramble = () => {
@@ -245,6 +247,7 @@ window.addEventListener("scroll", function () {
     if (frame < steps) {
       setTimeout(scramble, (1000 / fps) + (4 + Math.random() * 10));
     } else {
+      titleEl.style.fontFamily = savedFont;
       titleEl.innerHTML = originalHTML; // restore styled HTML
     }
   };
@@ -409,6 +412,7 @@ window.addEventListener("scroll", function () {
       // Override to left-align during scramble so changing characters don't shift
       // the visual center (fixed-width container prevents horizontal jitter)
       splashTitle.style.textAlign = "left";
+      splashTitle.style.fontFamily = "'Courier New', monospace";
       bindObservers();
 
       let frame = 0;
@@ -446,8 +450,8 @@ window.addEventListener("scroll", function () {
           requestAnimationFrame(scramble);
         } else {
           unbindObservers();
-          // Restore center alignment - same font, same container, exact position match
           splashTitle.style.textAlign = "center";
+          splashTitle.style.fontFamily = "";
           splashTitle.textContent = targetText;
           if (splashBar) splashBar.style.width = "100%";
           showLogo();
