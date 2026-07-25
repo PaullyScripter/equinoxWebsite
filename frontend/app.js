@@ -82,6 +82,15 @@ window.addEventListener("scroll", function () {
 });
 
 (function () {
+  const navBar = document.querySelector(".navigation_bar");
+  if (!navBar) return;
+  const path = window.location.pathname.toLowerCase();
+  if (!path.includes("index") && !path.endsWith("/")) {
+    navBar.classList.add("navigation_bar-colored");
+  }
+})();
+
+(function () {
   const selector = ".features_img img, .second_feature_image, .third_feature_image, .fourth_feature_image";
   const thumbs = document.querySelectorAll(selector);
 
