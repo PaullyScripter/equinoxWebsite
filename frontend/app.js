@@ -1264,12 +1264,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      card.style.transform = `scale(1.09) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
+      const isBestDeal = card.classList.contains("best-deal");
+      const baseScale = isBestDeal ? 1.08 : 1.04;
+      card.style.transform = `scale(${baseScale}) rotateY(${x * 20}deg) rotateX(${-y * 20}deg)`;
     });
-    card.addEventListener("mouseleave", () => {
-      card.style.transition = "transform 0.3s ease-out";
-      card.style.transform = "";
-    });
+    card.addEventListener("mouseleave", () => { card.style.transform = ""; });
   });
 })();
 
