@@ -1256,9 +1256,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ── Premium card 3D tilt (mouse only) ──
 (function () {
-  if (!window.matchMedia("(hover: hover)").matches) return;
-  document.querySelectorAll(".premium-box").forEach(card => {
+  const cards = document.querySelectorAll(".premium-box");
+  if (!cards.length) return;
+  cards.forEach(card => {
     card.addEventListener("mousemove", (e) => {
+      if (window.matchMedia("(hover: none)").matches) return;
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
