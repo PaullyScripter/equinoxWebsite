@@ -1082,17 +1082,17 @@ body.no-scroll {
 }
 
 /* ── Premium card 3D tilt ── */
-.premium-cards {
-  perspective: 800px;
-}
 .premium-cards > div {
   perspective: 800px;
 }
 .premium-box {
-  transition: box-shadow 0.3s ease;
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
 }
 
-/* ── 3D tilt via JS mouse tracking ── */
+/* If you want the best-deal to pop a tad more */
+.best-deal:hover {
+  transform: scale(1.06);
+}
 
 
 
@@ -1935,6 +1935,8 @@ body.no-scroll {
 @media (max-width: 600px) {
   .code-box { width: 40px; height: 40px; font-size: 20px; }
   .code-row { gap: 10px; }
+  .pricing-compare { padding: 2rem 2rem 3rem; }
+  .faq-section { padding: 2.5rem 2rem; }
 }
 
 
@@ -2366,8 +2368,8 @@ body.modal-open {
   }
   /* Avoid 100vh clipping on mobile and reduce side padding */
   .premium-page {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
     height: auto;
     min-height: 100vh;
     width: 100%;
@@ -2459,8 +2461,8 @@ body.modal-open {
 @media (max-width: 480px) {
   /* Slightly tighter on very small phones */
   .premium-page {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   .compare-grid {

@@ -221,6 +221,8 @@ window.addEventListener("scroll", function () {
   const fps = 60;
   const steps = Math.max(12, Math.floor((duration / 1000) * fps));
   const length = targetText.length;
+  const savedFont = titleEl.style.fontFamily;
+  titleEl.style.fontFamily = "'Courier New', monospace";
 
   let frame = 0;
   const scramble = () => {
@@ -245,6 +247,7 @@ window.addEventListener("scroll", function () {
     if (frame < steps) {
       setTimeout(scramble, (1000 / fps) + (4 + Math.random() * 10));
     } else {
+      titleEl.style.fontFamily = savedFont;
       titleEl.innerHTML = originalHTML; // restore styled HTML
     }
   };
@@ -409,6 +412,7 @@ window.addEventListener("scroll", function () {
       // Override to left-align during scramble so changing characters don't shift
       // the visual center (fixed-width container prevents horizontal jitter)
       splashTitle.style.textAlign = "left";
+      splashTitle.style.fontFamily = "'Courier New', monospace";
       bindObservers();
 
       let frame = 0;
@@ -446,8 +450,8 @@ window.addEventListener("scroll", function () {
           requestAnimationFrame(scramble);
         } else {
           unbindObservers();
-          // Restore center alignment - same font, same container, exact position match
           splashTitle.style.textAlign = "center";
+          splashTitle.style.fontFamily = "";
           splashTitle.textContent = targetText;
           if (splashBar) splashBar.style.width = "100%";
           showLogo();
@@ -1025,8 +1029,7 @@ async function protectDeveloperPage() {
   if (!isDevPage) return;
 
   const user = await getMe();
-  if (!user) return;
-  if (!isDevUser(user)) {
+  if (!user || !isDevUser(user)) {
     window.location.replace("premium.html");
     return;
   }
@@ -1256,25 +1259,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ── Premium card 3D tilt (mouse only) ──
 (function () {
-  const cards = document.querySelectorAll(".premium-box");
-  if (!cards.length) return;
-  cards.forEach(card => {
-    card.addEventListener("mouseenter", () => {
-      card.style.transition = "none";
-    });
+  if (!window.matchMedia("(hover: hover)").matches) return;
+  document.querySelectorAll(".premium-box").forEach(card => {
     card.addEventListener("mousemove", (e) => {
-      if (window.matchMedia("(hover: none)").matches) return;
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      const isBestDeal = card.classList.contains("best-deal");
-      const baseScale = isBestDeal ? 1.08 : 1.04;
-      card.style.transform = `scale(${baseScale}) rotateY(${x * 30}deg) rotateX(${-y * 30}deg)`;
+      card.style.transform = `scale(1.09) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
     });
-    card.addEventListener("mouseleave", () => {
-      card.style.transition = "transform 0.3s ease-out, box-shadow 0.3s ease";
-      card.style.transform = "";
-    });
+    card.addEventListener("mouseleave", () => { card.style.transform = ""; });
   });
 })();
 
