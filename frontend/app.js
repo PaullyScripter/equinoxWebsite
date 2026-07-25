@@ -1025,8 +1025,7 @@ async function protectDeveloperPage() {
   if (!isDevPage) return;
 
   const user = await getMe();
-  if (!user) return;
-  if (!isDevUser(user)) {
+  if (!user || !isDevUser(user)) {
     window.location.replace("premium.html");
     return;
   }
