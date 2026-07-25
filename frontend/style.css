@@ -1935,6 +1935,8 @@ body.no-scroll {
 @media (max-width: 600px) {
   .code-box { width: 40px; height: 40px; font-size: 20px; }
   .code-row { gap: 10px; }
+  .pricing-compare { padding: 2rem 1.5rem 3rem; }
+  .faq-section { padding: 2.5rem 1.5rem; }
 }
 
 
