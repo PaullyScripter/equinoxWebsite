@@ -1082,12 +1082,14 @@ body.no-scroll {
 }
 
 /* ── Premium card 3D tilt ── */
+.premium-cards {
+  perspective: 800px;
+}
 .premium-cards > div {
   perspective: 800px;
 }
 .premium-box {
   transition: box-shadow 0.3s ease;
-  transform-style: preserve-3d;
 }
 
 /* ── 3D tilt via JS mouse tracking ── */
