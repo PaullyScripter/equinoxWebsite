@@ -1266,7 +1266,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const y = (e.clientY - rect.top) / rect.height - 0.5;
       const isBestDeal = card.classList.contains("best-deal");
       const baseScale = isBestDeal ? 1.08 : 1.04;
-      card.style.transform = `scale(${baseScale}) rotateY(${x * 20}deg) rotateX(${-y * 20}deg)`;
+      card.style.transform = `perspective(800px) scale(${baseScale}) rotateY(${x * 30}deg) rotateX(${-y * 30}deg)`;
     });
     card.addEventListener("mouseleave", () => { card.style.transform = ""; });
   });
