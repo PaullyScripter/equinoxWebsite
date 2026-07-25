@@ -77,6 +77,12 @@ if (window.Typed && document.querySelector(".typedText")) {
 window.addEventListener("scroll", function () {
   const navBar = document.querySelector(".navigation_bar");
   if (!navBar) return;
+  const path = window.location.pathname.toLowerCase();
+  const isHome = path.endsWith("/") || path.includes("index");
+  if (!isHome) {
+    navBar.classList.add("navigation_bar-colored");
+    return;
+  }
   if (window.pageYOffset > 10) navBar.classList.add("navigation_bar-colored");
   else navBar.classList.remove("navigation_bar-colored");
 });
