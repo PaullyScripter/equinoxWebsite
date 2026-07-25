@@ -1256,25 +1256,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ── Premium card 3D tilt (mouse only) ──
 (function () {
-  const cards = document.querySelectorAll(".premium-box");
-  if (!cards.length) return;
-  cards.forEach(card => {
-    card.addEventListener("mouseenter", () => {
-      card.style.transition = "none";
-    });
+  if (!window.matchMedia("(hover: hover)").matches) return;
+  document.querySelectorAll(".premium-box").forEach(card => {
     card.addEventListener("mousemove", (e) => {
-      if (window.matchMedia("(hover: none)").matches) return;
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      const isBestDeal = card.classList.contains("best-deal");
-      const baseScale = isBestDeal ? 1.08 : 1.04;
-      card.style.transform = `scale(${baseScale}) rotateY(${x * 30}deg) rotateX(${-y * 30}deg)`;
+      card.style.transform = `scale(1.09) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
     });
-    card.addEventListener("mouseleave", () => {
-      card.style.transition = "transform 0.3s ease-out, box-shadow 0.3s ease";
-      card.style.transform = "";
-    });
+    card.addEventListener("mouseleave", () => { card.style.transform = ""; });
   });
 })();
 

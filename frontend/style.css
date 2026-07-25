@@ -1082,17 +1082,17 @@ body.no-scroll {
 }
 
 /* ── Premium card 3D tilt ── */
-.premium-cards {
-  perspective: 800px;
-}
 .premium-cards > div {
   perspective: 800px;
 }
 .premium-box {
-  transition: box-shadow 0.3s ease;
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
 }
 
-/* ── 3D tilt via JS mouse tracking ── */
+/* If you want the best-deal to pop a tad more */
+.best-deal:hover {
+  transform: scale(1.06);
+}
 
 
 
