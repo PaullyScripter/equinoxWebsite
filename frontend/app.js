@@ -1243,18 +1243,18 @@ document.addEventListener("DOMContentLoaded", () => {
 (function () {
   document.querySelectorAll(".premium-box").forEach(card => {
     card.addEventListener("mouseenter", () => {
-      card.style.transition = "transform 0.1s ease-out, box-shadow 0.3s ease";
+      card.style.setProperty("transition", "transform 0.1s ease-out, box-shadow 0.3s ease", "important");
     });
     card.addEventListener("mousemove", (e) => {
       if (window.matchMedia("(hover: none)").matches) return;
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      card.style.transform = `perspective(800px) scale(1.09) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
+      card.style.setProperty("transform", `perspective(800px) scale(1.09) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`, "important");
     });
     card.addEventListener("mouseleave", () => {
-      card.style.transition = "transform 0.3s ease-out, box-shadow 0.3s ease";
-      card.style.transform = "";
+      card.style.setProperty("transition", "transform 0.3s ease-out, box-shadow 0.3s ease", "important");
+      card.style.setProperty("transform", "none", "important");
     });
   });
 })();
