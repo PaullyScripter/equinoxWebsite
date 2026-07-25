@@ -1086,13 +1086,10 @@ body.no-scroll {
   perspective: 800px;
 }
 .premium-box {
-  will-change: transform;
-}
-.premium-box:hover {
-  transform: scale(1.04);
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
 }
 .best-deal:hover {
-  transform: scale(1.08);
+  transform: scale(1.06);
 }
 
 /* ── 3D tilt via JS mouse tracking ── */
