@@ -2723,7 +2723,8 @@ body.page-transition-in { opacity: 1; transition: opacity 180ms ease; }
   .footer-links-box:hover a { font-size: 1em; }
   .footer-logo:hover { transform: none; }
   .footer-logo:hover svg path.logo-star { filter: none; }
-  .best-deal:hover { box-shadow: none; }
+  .best-deal:hover { box-shadow: none; transform: none; }
+  .premium-box:hover { transform: none; }
   .homepage_title { transform: none !important; text-shadow: none !important; transition: none !important; will-change: auto; transform-style: flat; }
   .paragraph_div { perspective: none; }
   .homepage-invite-button:hover::before { transform: scaleY(0); }
