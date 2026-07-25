@@ -1259,6 +1259,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const cards = document.querySelectorAll(".premium-box");
   if (!cards.length) return;
   cards.forEach(card => {
+    card.addEventListener("mouseenter", () => {
+      card.style.transition = "none";
+    });
     card.addEventListener("mousemove", (e) => {
       if (window.matchMedia("(hover: none)").matches) return;
       const rect = card.getBoundingClientRect();
@@ -1268,7 +1271,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const baseScale = isBestDeal ? 1.08 : 1.04;
       card.style.transform = `perspective(800px) scale(${baseScale}) rotateY(${x * 30}deg) rotateX(${-y * 30}deg)`;
     });
-    card.addEventListener("mouseleave", () => { card.style.transform = ""; });
+    card.addEventListener("mouseleave", () => {
+      card.style.transition = "transform 0.3s ease-out, box-shadow 0.3s ease";
+      card.style.transform = "";
+    });
   });
 })();
 
