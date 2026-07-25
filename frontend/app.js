@@ -74,12 +74,17 @@ if (window.Typed && document.querySelector(".typedText")) {
   });
 }
 
-window.addEventListener("scroll", function () {
+function updateNavOpacity() {
   const navBar = document.querySelector(".navigation_bar");
   if (!navBar) return;
-  if (window.pageYOffset > 10) navBar.classList.add("navigation_bar-colored");
-  else navBar.classList.remove("navigation_bar-colored");
-});
+  if (window.pageYOffset > 10 || !window.location.pathname.includes("index")) {
+    navBar.classList.add("navigation_bar-colored");
+  } else {
+    navBar.classList.remove("navigation_bar-colored");
+  }
+}
+window.addEventListener("scroll", updateNavOpacity);
+updateNavOpacity();
 
 (function () {
   const selector = ".features_img img, .second_feature_image, .third_feature_image, .fourth_feature_image";
