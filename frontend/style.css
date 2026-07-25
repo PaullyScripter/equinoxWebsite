@@ -748,6 +748,15 @@ body.no-scroll { overflow: hidden; }
   transform: translate(-50%, -50%) scale(1) rotate(60deg);
 }
 
+@keyframes splash-spark {
+  0%   { text-shadow: 0 0 0 rgba(0,255,0,0); }
+  20%  { text-shadow: 0 0 20px rgba(0,255,0,0.8), 0 0 40px rgba(0,255,0,0.4); }
+  100% { text-shadow: 0 0 0 rgba(0,255,0,0); }
+}
+.splash-spark {
+  animation: splash-spark 0.5s ease-out;
+}
+
 /* The title will be absolutely positioned by JS */
 #splash-title {
   position: fixed; /* set by JS too, but safe default */

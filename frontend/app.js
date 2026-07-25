@@ -221,31 +221,63 @@ window.addEventListener("scroll", function () {
   const fps = 60;
   const steps = Math.max(12, Math.floor((duration / 1000) * fps));
   const length = targetText.length;
+  const greek = "αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
+
+  titleEl.style.transition = "color 0.3s ease";
+  titleEl.style.color = "#0f0";
 
   let frame = 0;
   const scramble = () => {
     frame++;
-    const lockCount = Math.floor((frame / steps) * length);
-    let out = "";
+    // Easing: ease-in-out + sine wave cascade
+    const t = frame / steps;
+    const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    const lockCount = Math.floor(eased * length);
 
+    const chars = new Array(length);
     for (let i = 0; i < length; i++) {
       const ch = targetText[i];
-      if (/\s/.test(ch) || i < lockCount) {
-        out += ch;
+      if (/\s/.test(ch)) {
+        chars[i] = ch;
+        continue;
+      }
+      // Wave cascade: each position unlocks based on sine offset
+      const waveOffset = Math.sin((i / length) * Math.PI * 2) * 0.3;
+      const charProgress = (frame / steps) + waveOffset;
+      if (charProgress >= 1 || i < lockCount) {
+        // Glitch flicker: 15% chance to show random instead of correct
+        chars[i] = (i < lockCount && Math.random() < 0.08) ? pool[(Math.random() * pool.length) | 0] : ch;
       } else {
-        const greek = "αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
-        out += Math.random() < 0.12
+        // Multi-scramble: pick 2-3 random chars at different positions for density
+        chars[i] = Math.random() < 0.2
           ? greek[(Math.random() * greek.length) | 0]
           : pool[(Math.random() * pool.length) | 0];
       }
     }
 
-    titleEl.textContent = out;
+    // Extra scrambles on remaining positions for visual density
+    for (let j = 0; j < 2; j++) {
+      const ri = Math.floor(Math.random() * length);
+      if (!/\s/.test(targetText[ri]) && frame / steps + Math.sin((ri / length) * Math.PI * 2) * 0.3 < 1) {
+        chars[ri] = pool[(Math.random() * pool.length) | 0];
+      }
+    }
+
+    titleEl.textContent = chars.join("");
+
+    // Color fade from green to white
+    const colorT = Math.min(1, frame / steps);
+    const r = Math.round(0 + colorT * 255);
+    const g = Math.round(255 - colorT * 195);
+    const b = Math.round(0 + colorT * 255);
+    titleEl.style.color = `rgb(${r},${g},${b})`;
 
     if (frame < steps) {
       setTimeout(scramble, (1000 / fps) + (4 + Math.random() * 10));
     } else {
-      titleEl.innerHTML = originalHTML; // restore styled HTML
+      titleEl.innerHTML = originalHTML;
+      titleEl.style.color = "";
+      titleEl.style.transition = "";
     }
   };
 
@@ -380,6 +412,7 @@ window.addEventListener("scroll", function () {
   const steps = Math.max(12, Math.floor((duration / 1000) * fps));
   const length = targetText.length;
   const frameInterval = 1000 / fps;
+  const greek = "αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
 
   function endSplash() {
     unbindObservers();
@@ -390,6 +423,11 @@ window.addEventListener("scroll", function () {
       window.dispatchEvent(new CustomEvent("equinox:splash-ended"));
       setTimeout(() => splash.remove(), 650);
     });
+  }
+
+  function sparkReveal() {
+    splashTitle.classList.add("splash-spark");
+    setTimeout(() => splashTitle.classList.remove("splash-spark"), 500);
   }
 
   function showLogo() {
@@ -409,6 +447,8 @@ window.addEventListener("scroll", function () {
       // Override to left-align during scramble so changing characters don't shift
       // the visual center (fixed-width container prevents horizontal jitter)
       splashTitle.style.textAlign = "left";
+      splashTitle.style.transition = "color 0.3s ease";
+      splashTitle.style.color = "#0f0";
       bindObservers();
 
       let frame = 0;
@@ -419,22 +459,42 @@ window.addEventListener("scroll", function () {
         if (elapsed >= frameInterval) {
           lastTime = now - (elapsed % frameInterval);
           frame++;
-          const lockCount = Math.floor((frame / steps) * length);
-          let out = "";
+          const t = frame / steps;
+          const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+          const lockCount = Math.floor(eased * length);
 
+          const chars = new Array(length);
           for (let i = 0; i < length; i++) {
             const ch = targetText[i];
-            if (/\s/.test(ch) || i < lockCount) {
-              out += ch;
+            if (/\s/.test(ch)) {
+              chars[i] = ch;
+              continue;
+            }
+            const waveOffset = Math.sin((i / length) * Math.PI * 2) * 0.3;
+            const charProgress = (frame / steps) + waveOffset;
+            if (charProgress >= 1 || i < lockCount) {
+              chars[i] = (i < lockCount && Math.random() < 0.08) ? pool[(Math.random() * pool.length) | 0] : ch;
             } else {
-              const greek = "αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
-              out += Math.random() < 0.15
+              chars[i] = Math.random() < 0.2
                 ? greek[(Math.random() * greek.length) | 0]
                 : pool[(Math.random() * pool.length) | 0];
             }
           }
 
-          splashTitle.textContent = out;
+          for (let j = 0; j < 2; j++) {
+            const ri = Math.floor(Math.random() * length);
+            if (!/\s/.test(targetText[ri]) && frame / steps + Math.sin((ri / length) * Math.PI * 2) * 0.3 < 1) {
+              chars[ri] = pool[(Math.random() * pool.length) | 0];
+            }
+          }
+
+          splashTitle.textContent = chars.join("");
+
+          const colorT = Math.min(1, frame / steps);
+          const r = Math.round(0 + colorT * 255);
+          const g = Math.round(255 - colorT * 195);
+          const b = Math.round(0 + colorT * 255);
+          splashTitle.style.color = `rgb(${r},${g},${b})`;
 
           if (splashBar) {
             const progress = Math.min(100, (frame / steps) * 100);
@@ -446,11 +506,13 @@ window.addEventListener("scroll", function () {
           requestAnimationFrame(scramble);
         } else {
           unbindObservers();
-          // Restore center alignment - same font, same container, exact position match
           splashTitle.style.textAlign = "center";
           splashTitle.textContent = targetText;
+          splashTitle.style.color = "#fff";
+          splashTitle.style.transition = "";
           if (splashBar) splashBar.style.width = "100%";
           showLogo();
+          sparkReveal();
           setTimeout(endSplash, 600);
         }
       }
